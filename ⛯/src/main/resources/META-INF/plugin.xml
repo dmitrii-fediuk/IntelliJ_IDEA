@@ -1,0 +1,47 @@
+<!--
+2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
+"Initialize standalone df.idea IntelliJ IDEA plugin repository":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+-->
+<idea-plugin>
+	<id>df.idea</id>
+	<name>Dmitrii Fediuk</name>
+	<version>1.0.0</version>
+	<vendor url="https://github.com/dmitrii-fediuk">Dmitrii Fediuk</vendor>
+	<description><![CDATA[
+		Personal IntelliJ IDEA plugin suite by Dmitrii Fediuk.
+		<ul>
+			<li><b>Copy Reference</b>: resolves file and directory paths for CopyReference (Ctrl+Q)
+				relative to the nearest nested module content root bounded by an outer module's
+				&lt;excludeFolder&gt;, instead of walking past excluded folders to an outer wrapper root.</li>
+			<li><b>Project Path Macros</b>: loads project-scoped path variables from UTF-8
+				<code>.properties</code> files discovered upward along ancestor <code>.idea</code>
+				directories, supporting relative paths, layered overrides, and cross-variable
+				references without global IDE Path Variables.</li>
+			<li><b>Local Update Source</b>: advertises the sibling <code>updatePlugins.xml</code>
+				local repository via <code>UpdateSettingsProvider</code> and registers it on startup
+				in the active IDE instance when no update source is configured for
+				<code>df.idea</code>.</li>
+		</ul>
+	]]></description>
+	<idea-version since-build="262"/>
+	<depends>com.intellij.modules.lang</depends>
+	<extensions defaultExtensionNs="com.intellij">
+		<virtualFileQualifiedNameProvider
+			id="dfExclusionAwareVirtualFileQualifiedNameProvider"
+			order="first"
+			implementation="df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProvider"/>
+		<projectPathMacroContributor
+			implementation="df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor"/>
+		<updateSettingsProvider
+			implementation="df.idea.feature.updatesource.LocalPluginUpdateSettingsProvider"/>
+	</extensions>
+	<applicationListeners>
+		<listener
+			class="df.idea.feature.pathmacros.ProjectPathMacroCacheInvalidator"
+			topic="com.intellij.openapi.project.ProjectCloseListener"/>
+		<listener
+			class="df.idea.feature.updatesource.LocalUpdateSourceRegistrar"
+			topic="com.intellij.ide.AppLifecycleListener"/>
+	</applicationListeners>
+</idea-plugin>
