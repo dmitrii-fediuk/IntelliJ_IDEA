@@ -4,6 +4,8 @@
 https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 "Remove nested ProjectRootEntity instances covered by module content roots":
 https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+"Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 -->
 <idea-plugin>
 	<id>df.idea</id>
@@ -16,6 +18,10 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 			<li><b>Copy Reference</b>: resolves file and directory paths for CopyReference (Ctrl+Q)
 				relative to the nearest nested module content root bounded by an outer module's
 				&lt;excludeFolder&gt;, instead of walking past excluded folders to an outer wrapper root.</li>
+			<li><b>Markdown Code Fence Background</b>: suppresses the hardcoded
+				<code>MARKDOWN_CODE_FENCE_BACKGROUND</code> full-width custom background renderer added in
+				IntelliJ IDEA 2026.3 so plain fenced code blocks keep the editor background while preserving
+				injected language highlighting.</li>
 			<li><b>Project Path Macros</b>: loads project-scoped path variables from UTF-8
 				<code>.properties</code> files discovered upward along ancestor <code>.idea</code>
 				directories, supporting relative paths, layered overrides, and cross-variable
@@ -33,16 +39,18 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 	<idea-version since-build="262"/>
 	<depends>com.intellij.modules.lang</depends>
 	<extensions defaultExtensionNs="com.intellij">
+		<editorFactoryListener
+			implementation="df.idea.feature.markdowncodefence.MarkdownCodeFenceBackgroundEditorListener"/>
+		<postStartupActivity
+			implementation="df.idea.feature.projectroots.NestedProjectRootCleanupActivity"/>
+		<projectPathMacroContributor
+			implementation="df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor"/>
+		<updateSettingsProvider
+			implementation="df.idea.feature.updatesource.LocalPluginUpdateSettingsProvider"/>
 		<virtualFileQualifiedNameProvider
 			id="dfExclusionAwareVirtualFileQualifiedNameProvider"
 			order="first"
 			implementation="df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProvider"/>
-		<projectPathMacroContributor
-			implementation="df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor"/>
-		<postStartupActivity
-			implementation="df.idea.feature.projectroots.NestedProjectRootCleanupActivity"/>
-		<updateSettingsProvider
-			implementation="df.idea.feature.updatesource.LocalPluginUpdateSettingsProvider"/>
 	</extensions>
 	<applicationListeners>
 		<listener

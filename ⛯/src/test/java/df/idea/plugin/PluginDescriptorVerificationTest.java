@@ -3,6 +3,8 @@
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 // "Remove nested ProjectRootEntity instances covered by module content roots":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 package df.idea.plugin;
 import com.intellij.ide.AppLifecycleListener;
 import com.intellij.ide.actions.VirtualFileQualifiedNameProvider;
@@ -20,6 +22,7 @@ import com.intellij.ide.plugins.newui.PluginNodeModelBuilderFactory;
 import com.intellij.ide.plugins.newui.PluginUiModel;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.impl.ProjectWidePathMacroContributor;
+import com.intellij.openapi.editor.event.EditorFactoryListener;
 import com.intellij.openapi.extensions.ExtensionDescriptor;
 import com.intellij.openapi.extensions.LoadingOrder;
 import com.intellij.openapi.project.ProjectCloseListener;
@@ -47,6 +50,7 @@ public final class PluginDescriptorVerificationTest {
 	private static final String PLUGIN_NAME = "Dmitrii Fediuk";
 	private static final String VENDOR_URL = "https://github.com/dmitrii-fediuk";
 	private static final String COPY_REF_IMPL = "df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProvider";
+	private static final String MARKDOWN_CODE_FENCE_IMPL = "df.idea.feature.markdowncodefence.MarkdownCodeFenceBackgroundEditorListener";
 	private static final String PATH_MACROS_IMPL = "df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor";
 	private static final String CACHE_INVALIDATOR_IMPL = "df.idea.feature.pathmacros.ProjectPathMacroCacheInvalidator";
 	private static final String PROJECT_ROOTS_IMPL = "df.idea.feature.projectroots.NestedProjectRootCleanupActivity";
@@ -112,6 +116,10 @@ public final class PluginDescriptorVerificationTest {
 		A.assertTrue("registers com.intellij.projectPathMacroContributor", null != ppmc && 1 == ppmc.size());
 		ExtensionDescriptor macroExt = ppmc.get(0);
 		A.assertEquals("pathmacros implementation class", PATH_MACROS_IMPL, macroExt.implementation);
+		List<ExtensionDescriptor> efl = extensions.get("com.intellij.editorFactoryListener");
+		A.assertTrue("registers com.intellij.editorFactoryListener", null != efl && 1 == efl.size());
+		ExtensionDescriptor mdFenceExt = efl.get(0);
+		A.assertEquals("markdowncodefence implementation class", MARKDOWN_CODE_FENCE_IMPL, mdFenceExt.implementation);
 		List<ExtensionDescriptor> psa = extensions.get("com.intellij.postStartupActivity");
 		A.assertTrue("registers com.intellij.postStartupActivity", null != psa && 1 == psa.size());
 		ExtensionDescriptor projectRootsExt = psa.get(0);
@@ -138,6 +146,8 @@ public final class PluginDescriptorVerificationTest {
 		try (URLClassLoader loader = new URLClassLoader(new URL[]{jarPath.toUri().toURL()}, PluginDescriptorVerificationTest.class.getClassLoader())) {
 			Object copyRefInstance = Class.forName(copyRefExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements VirtualFileQualifiedNameProvider", copyRefInstance instanceof VirtualFileQualifiedNameProvider);
+			Object mdFenceInstance = Class.forName(mdFenceExt.implementation, true, loader).getDeclaredConstructor().newInstance();
+			A.assertTrue("loaded class implements EditorFactoryListener", mdFenceInstance instanceof EditorFactoryListener);
 			Object macroInstance = Class.forName(macroExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements ProjectWidePathMacroContributor", macroInstance instanceof ProjectWidePathMacroContributor);
 			Object projectRootsInstance = Class.forName(projectRootsExt.implementation, true, loader).getDeclaredConstructor().newInstance();

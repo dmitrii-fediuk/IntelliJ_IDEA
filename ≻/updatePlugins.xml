@@ -10,6 +10,10 @@
 			<li><b>Copy Reference</b>: resolves file and directory paths for CopyReference (Ctrl+Q)
 				relative to the nearest nested module content root bounded by an outer module's
 				&lt;excludeFolder&gt;, instead of walking past excluded folders to an outer wrapper root.</li>
+			<li><b>Markdown Code Fence Background</b>: suppresses the hardcoded
+				<code>MARKDOWN_CODE_FENCE_BACKGROUND</code> full-width custom background renderer added in
+				IntelliJ IDEA 2026.3 so plain fenced code blocks keep the editor background while preserving
+				injected language highlighting.</li>
 			<li><b>Project Path Macros</b>: loads project-scoped path variables from UTF-8
 				<code>.properties</code> files discovered upward along ancestor <code>.idea</code>
 				directories, supporting relative paths, layered overrides, and cross-variable

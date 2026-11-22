@@ -3,6 +3,8 @@
 # https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 # "Remove nested ProjectRootEntity instances covered by module content roots":
 # https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+# "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 param(
 	[string]$IdeaHome = '',
 	[string]$IdeaPropertiesFile = '',
@@ -298,6 +300,8 @@ try {
 		$runCp = "$testOut;$mainOut;$ideaLibWildcard"
 		$featureTests = @(
 			'df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProviderTest',
+			'df.idea.feature.markdowncodefence.MarkdownCodeFenceBackgroundSuppressorTest',
+			'df.idea.feature.markdowncodefence.IdeMarkdownCodeFenceIntegrationTest',
 			'df.idea.feature.pathmacros.MacroPropertiesLocatorTest',
 			'df.idea.feature.pathmacros.MacroPropertiesParserTest',
 			'df.idea.feature.pathmacros.MacroPathResolverTest',
