@@ -1,6 +1,8 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
 // "Initialize standalone df.idea IntelliJ IDEA plugin repository":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+// "Remove nested ProjectRootEntity instances covered by module content roots":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 package df.idea.plugin;
 import com.intellij.ide.AppLifecycleListener;
 import com.intellij.ide.actions.VirtualFileQualifiedNameProvider;
@@ -21,6 +23,7 @@ import com.intellij.openapi.components.impl.ProjectWidePathMacroContributor;
 import com.intellij.openapi.extensions.ExtensionDescriptor;
 import com.intellij.openapi.extensions.LoadingOrder;
 import com.intellij.openapi.project.ProjectCloseListener;
+import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.openapi.updateSettings.impl.UpdateSettingsProvider;
 import com.intellij.openapi.util.BuildNumber;
 import com.intellij.util.lang.ZipEntryResolverPool;
@@ -46,6 +49,7 @@ public final class PluginDescriptorVerificationTest {
 	private static final String COPY_REF_IMPL = "df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProvider";
 	private static final String PATH_MACROS_IMPL = "df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor";
 	private static final String CACHE_INVALIDATOR_IMPL = "df.idea.feature.pathmacros.ProjectPathMacroCacheInvalidator";
+	private static final String PROJECT_ROOTS_IMPL = "df.idea.feature.projectroots.NestedProjectRootCleanupActivity";
 	private static final String UPDATE_SETTINGS_PROVIDER_IMPL = "df.idea.feature.updatesource.LocalPluginUpdateSettingsProvider";
 	private static final String UPDATE_SOURCE_REGISTRAR_IMPL = "df.idea.feature.updatesource.LocalUpdateSourceRegistrar";
 	private static final Assertions A = new Assertions();
@@ -108,6 +112,10 @@ public final class PluginDescriptorVerificationTest {
 		A.assertTrue("registers com.intellij.projectPathMacroContributor", null != ppmc && 1 == ppmc.size());
 		ExtensionDescriptor macroExt = ppmc.get(0);
 		A.assertEquals("pathmacros implementation class", PATH_MACROS_IMPL, macroExt.implementation);
+		List<ExtensionDescriptor> psa = extensions.get("com.intellij.postStartupActivity");
+		A.assertTrue("registers com.intellij.postStartupActivity", null != psa && 1 == psa.size());
+		ExtensionDescriptor projectRootsExt = psa.get(0);
+		A.assertEquals("projectroots implementation class", PROJECT_ROOTS_IMPL, projectRootsExt.implementation);
 		List<ExtensionDescriptor> usp = extensions.get("com.intellij.updateSettingsProvider");
 		A.assertTrue("registers com.intellij.updateSettingsProvider", null != usp && 1 == usp.size());
 		ExtensionDescriptor updateProviderExt = usp.get(0);
@@ -132,6 +140,8 @@ public final class PluginDescriptorVerificationTest {
 			A.assertTrue("loaded class implements VirtualFileQualifiedNameProvider", copyRefInstance instanceof VirtualFileQualifiedNameProvider);
 			Object macroInstance = Class.forName(macroExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements ProjectWidePathMacroContributor", macroInstance instanceof ProjectWidePathMacroContributor);
+			Object projectRootsInstance = Class.forName(projectRootsExt.implementation, true, loader).getDeclaredConstructor().newInstance();
+			A.assertTrue("loaded class implements ProjectActivity", projectRootsInstance instanceof ProjectActivity);
 			Object updateProviderInstance = Class.forName(updateProviderExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements UpdateSettingsProvider", updateProviderInstance instanceof UpdateSettingsProvider);
 			Object listenerInstance = Class.forName(CACHE_INVALIDATOR_IMPL, true, loader).getDeclaredConstructor().newInstance();

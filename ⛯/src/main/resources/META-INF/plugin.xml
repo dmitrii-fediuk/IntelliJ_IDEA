@@ -2,6 +2,8 @@
 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
 "Initialize standalone df.idea IntelliJ IDEA plugin repository":
 https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+"Remove nested ProjectRootEntity instances covered by module content roots":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 -->
 <idea-plugin>
 	<id>df.idea</id>
@@ -18,6 +20,10 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 				<code>.properties</code> files discovered upward along ancestor <code>.idea</code>
 				directories, supporting relative paths, layered overrides, and cross-variable
 				references without global IDE Path Variables.</li>
+			<li><b>Project Roots</b>: removes redundant nested <code>ProjectRootEntity</code>
+				entries whose root is strictly inside an enclosing module content root, restoring
+				module ownership and visibility of nested project directories in the
+				<code>Project Files</code> view.</li>
 			<li><b>Local Update Source</b>: advertises the sibling <code>updatePlugins.xml</code>
 				local repository via <code>UpdateSettingsProvider</code> and registers it on startup
 				in the active IDE instance when no update source is configured for
@@ -33,6 +39,8 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 			implementation="df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProvider"/>
 		<projectPathMacroContributor
 			implementation="df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor"/>
+		<postStartupActivity
+			implementation="df.idea.feature.projectroots.NestedProjectRootCleanupActivity"/>
 		<updateSettingsProvider
 			implementation="df.idea.feature.updatesource.LocalPluginUpdateSettingsProvider"/>
 	</extensions>

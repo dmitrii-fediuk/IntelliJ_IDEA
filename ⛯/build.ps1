@@ -1,6 +1,8 @@
 ﻿# 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
 # "Initialize standalone df.idea IntelliJ IDEA plugin repository":
 # https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+# "Remove nested ProjectRootEntity instances covered by module content roots":
+# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 param(
 	[string]$IdeaHome = '',
 	[string]$IdeaPropertiesFile = '',
@@ -300,6 +302,9 @@ try {
 			'df.idea.feature.pathmacros.MacroPropertiesParserTest',
 			'df.idea.feature.pathmacros.MacroPathResolverTest',
 			'df.idea.feature.pathmacros.IdePathMacroIntegrationTest',
+			'df.idea.feature.projectroots.NestedProjectRootMatcherTest',
+			'df.idea.feature.projectroots.NestedProjectRootCleanerTest',
+			'df.idea.feature.projectroots.IdeProjectRootIntegrationTest',
 			'df.idea.feature.updatesource.LocalPluginRepositoryLocatorTest',
 			'df.idea.feature.updatesource.LocalUpdateSourceRegistrarTest'
 		)
