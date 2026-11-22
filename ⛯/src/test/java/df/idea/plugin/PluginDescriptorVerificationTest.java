@@ -5,6 +5,8 @@
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 // "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+// "Standardize df.idea feature package names with snake_case word separators":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.plugin;
 import com.intellij.ide.AppLifecycleListener;
 import com.intellij.ide.actions.VirtualFileQualifiedNameProvider;
@@ -31,7 +33,7 @@ import com.intellij.openapi.updateSettings.impl.UpdateSettingsProvider;
 import com.intellij.openapi.util.BuildNumber;
 import com.intellij.util.lang.ZipEntryResolverPool;
 import com.intellij.util.messages.ListenerDescriptor;
-import df.idea.feature.updatesource.LocalPluginRepositoryLocator;
+import df.idea.feature.plugin_update_source.LocalPluginRepositoryLocator;
 import df.idea.support.Assertions;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -49,13 +51,13 @@ public final class PluginDescriptorVerificationTest {
 	private static final String PLUGIN_ID = "df.idea";
 	private static final String PLUGIN_NAME = "Dmitrii Fediuk";
 	private static final String VENDOR_URL = "https://github.com/dmitrii-fediuk";
-	private static final String COPY_REF_IMPL = "df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProvider";
-	private static final String MARKDOWN_CODE_FENCE_IMPL = "df.idea.feature.markdowncodefence.MarkdownCodeFenceBackgroundEditorListener";
-	private static final String PATH_MACROS_IMPL = "df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor";
-	private static final String CACHE_INVALIDATOR_IMPL = "df.idea.feature.pathmacros.ProjectPathMacroCacheInvalidator";
-	private static final String PROJECT_ROOTS_IMPL = "df.idea.feature.projectroots.NestedProjectRootCleanupActivity";
-	private static final String UPDATE_SETTINGS_PROVIDER_IMPL = "df.idea.feature.updatesource.LocalPluginUpdateSettingsProvider";
-	private static final String UPDATE_SOURCE_REGISTRAR_IMPL = "df.idea.feature.updatesource.LocalUpdateSourceRegistrar";
+	private static final String COPY_REFERENCE_IMPL = "df.idea.feature.copy_reference.ExclusionAwareVirtualFileQualifiedNameProvider";
+	private static final String MARKDOWN_CODE_FENCE_BACKGROUND_IMPL = "df.idea.feature.markdown_code_fence_background.MarkdownCodeFenceBackgroundEditorListener";
+	private static final String NESTED_PROJECT_ROOT_IMPL = "df.idea.feature.nested_project_root.NestedProjectRootCleanupActivity";
+	private static final String PLUGIN_UPDATE_SETTINGS_PROVIDER_IMPL = "df.idea.feature.plugin_update_source.LocalPluginUpdateSettingsProvider";
+	private static final String PLUGIN_UPDATE_SOURCE_REGISTRAR_IMPL = "df.idea.feature.plugin_update_source.LocalUpdateSourceRegistrar";
+	private static final String PROJECT_PATH_MACRO_IMPL = "df.idea.feature.project_path_macro.ProjectPropertiesPathMacroContributor";
+	private static final String PROJECT_PATH_MACRO_CACHE_INVALIDATOR_IMPL = "df.idea.feature.project_path_macro.ProjectPathMacroCacheInvalidator";
 	private static final Assertions A = new Assertions();
 	public static void main(String[] args) throws Exception {
 		if (1 > args.length) {
@@ -110,33 +112,33 @@ public final class PluginDescriptorVerificationTest {
 		List<ExtensionDescriptor> vfqnp = extensions.get("com.intellij.virtualFileQualifiedNameProvider");
 		A.assertTrue("registers com.intellij.virtualFileQualifiedNameProvider", null != vfqnp && 1 == vfqnp.size());
 		ExtensionDescriptor copyRefExt = vfqnp.get(0);
-		A.assertEquals("copyreference implementation class", COPY_REF_IMPL, copyRefExt.implementation);
-		A.assertEquals("copyreference extension order is FIRST", LoadingOrder.FIRST.toString(), copyRefExt.order.toString());
+		A.assertEquals("copy_reference implementation class", COPY_REFERENCE_IMPL, copyRefExt.implementation);
+		A.assertEquals("copy_reference extension order is FIRST", LoadingOrder.FIRST.toString(), copyRefExt.order.toString());
 		List<ExtensionDescriptor> ppmc = extensions.get("com.intellij.projectPathMacroContributor");
 		A.assertTrue("registers com.intellij.projectPathMacroContributor", null != ppmc && 1 == ppmc.size());
 		ExtensionDescriptor macroExt = ppmc.get(0);
-		A.assertEquals("pathmacros implementation class", PATH_MACROS_IMPL, macroExt.implementation);
+		A.assertEquals("project_path_macro implementation class", PROJECT_PATH_MACRO_IMPL, macroExt.implementation);
 		List<ExtensionDescriptor> efl = extensions.get("com.intellij.editorFactoryListener");
 		A.assertTrue("registers com.intellij.editorFactoryListener", null != efl && 1 == efl.size());
 		ExtensionDescriptor mdFenceExt = efl.get(0);
-		A.assertEquals("markdowncodefence implementation class", MARKDOWN_CODE_FENCE_IMPL, mdFenceExt.implementation);
+		A.assertEquals("markdown_code_fence_background implementation class", MARKDOWN_CODE_FENCE_BACKGROUND_IMPL, mdFenceExt.implementation);
 		List<ExtensionDescriptor> psa = extensions.get("com.intellij.postStartupActivity");
 		A.assertTrue("registers com.intellij.postStartupActivity", null != psa && 1 == psa.size());
 		ExtensionDescriptor projectRootsExt = psa.get(0);
-		A.assertEquals("projectroots implementation class", PROJECT_ROOTS_IMPL, projectRootsExt.implementation);
+		A.assertEquals("nested_project_root implementation class", NESTED_PROJECT_ROOT_IMPL, projectRootsExt.implementation);
 		List<ExtensionDescriptor> usp = extensions.get("com.intellij.updateSettingsProvider");
 		A.assertTrue("registers com.intellij.updateSettingsProvider", null != usp && 1 == usp.size());
 		ExtensionDescriptor updateProviderExt = usp.get(0);
-		A.assertEquals("updatesource provider implementation class", UPDATE_SETTINGS_PROVIDER_IMPL, updateProviderExt.implementation);
+		A.assertEquals("plugin_update_source provider implementation class", PLUGIN_UPDATE_SETTINGS_PROVIDER_IMPL, updateProviderExt.implementation);
 		List<ListenerDescriptor> appListeners = descriptor.getAppContainerDescriptor().listeners;
 		boolean foundInvalidator = false;
 		boolean foundUpdateRegistrar = false;
 		for (ListenerDescriptor ld : appListeners) {
-			if (CACHE_INVALIDATOR_IMPL.equals(ld.listenerClassName)
+			if (PROJECT_PATH_MACRO_CACHE_INVALIDATOR_IMPL.equals(ld.listenerClassName)
 				&& ProjectCloseListener.class.getName().equals(ld.topicClassName)) {
 				foundInvalidator = true;
 			}
-			if (UPDATE_SOURCE_REGISTRAR_IMPL.equals(ld.listenerClassName)
+			if (PLUGIN_UPDATE_SOURCE_REGISTRAR_IMPL.equals(ld.listenerClassName)
 				&& AppLifecycleListener.class.getName().equals(ld.topicClassName)) {
 				foundUpdateRegistrar = true;
 			}
@@ -154,9 +156,9 @@ public final class PluginDescriptorVerificationTest {
 			A.assertTrue("loaded class implements ProjectActivity", projectRootsInstance instanceof ProjectActivity);
 			Object updateProviderInstance = Class.forName(updateProviderExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements UpdateSettingsProvider", updateProviderInstance instanceof UpdateSettingsProvider);
-			Object listenerInstance = Class.forName(CACHE_INVALIDATOR_IMPL, true, loader).getDeclaredConstructor().newInstance();
+			Object listenerInstance = Class.forName(PROJECT_PATH_MACRO_CACHE_INVALIDATOR_IMPL, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements ProjectCloseListener", listenerInstance instanceof ProjectCloseListener);
-			Object registrarInstance = Class.forName(UPDATE_SOURCE_REGISTRAR_IMPL, true, loader).getDeclaredConstructor().newInstance();
+			Object registrarInstance = Class.forName(PLUGIN_UPDATE_SOURCE_REGISTRAR_IMPL, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements AppLifecycleListener", registrarInstance instanceof AppLifecycleListener);
 		}
 	}

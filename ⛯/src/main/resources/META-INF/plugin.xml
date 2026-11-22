@@ -6,6 +6,8 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
 https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+"Standardize df.idea feature package names with snake_case word separators":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 -->
 <idea-plugin>
 	<id>df.idea</id>
@@ -22,42 +24,42 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 				<code>MARKDOWN_CODE_FENCE_BACKGROUND</code> full-width custom background renderer added in
 				IntelliJ IDEA 2026.3 so plain fenced code blocks keep the editor background while preserving
 				injected language highlighting.</li>
-			<li><b>Project Path Macros</b>: loads project-scoped path variables from UTF-8
-				<code>.properties</code> files discovered upward along ancestor <code>.idea</code>
-				directories, supporting relative paths, layered overrides, and cross-variable
-				references without global IDE Path Variables.</li>
-			<li><b>Project Roots</b>: removes redundant nested <code>ProjectRootEntity</code>
+			<li><b>Nested Project Root</b>: removes redundant nested <code>ProjectRootEntity</code>
 				entries whose root is strictly inside an enclosing module content root, restoring
 				module ownership and visibility of nested project directories in the
 				<code>Project Files</code> view.</li>
-			<li><b>Local Update Source</b>: advertises the sibling <code>updatePlugins.xml</code>
+			<li><b>Plugin Update Source</b>: advertises the sibling <code>updatePlugins.xml</code>
 				local repository via <code>UpdateSettingsProvider</code> and registers it on startup
 				in the active IDE instance when no update source is configured for
 				<code>df.idea</code>.</li>
+			<li><b>Project Path Macro</b>: loads project-scoped path variables from UTF-8
+				<code>.properties</code> files discovered upward along ancestor <code>.idea</code>
+				directories, supporting relative paths, layered overrides, and cross-variable
+				references without global IDE Path Variables.</li>
 		</ul>
 	]]></description>
 	<idea-version since-build="262"/>
 	<depends>com.intellij.modules.lang</depends>
 	<extensions defaultExtensionNs="com.intellij">
 		<editorFactoryListener
-			implementation="df.idea.feature.markdowncodefence.MarkdownCodeFenceBackgroundEditorListener"/>
+			implementation="df.idea.feature.markdown_code_fence_background.MarkdownCodeFenceBackgroundEditorListener"/>
 		<postStartupActivity
-			implementation="df.idea.feature.projectroots.NestedProjectRootCleanupActivity"/>
+			implementation="df.idea.feature.nested_project_root.NestedProjectRootCleanupActivity"/>
 		<projectPathMacroContributor
-			implementation="df.idea.feature.pathmacros.ProjectPropertiesPathMacroContributor"/>
+			implementation="df.idea.feature.project_path_macro.ProjectPropertiesPathMacroContributor"/>
 		<updateSettingsProvider
-			implementation="df.idea.feature.updatesource.LocalPluginUpdateSettingsProvider"/>
+			implementation="df.idea.feature.plugin_update_source.LocalPluginUpdateSettingsProvider"/>
 		<virtualFileQualifiedNameProvider
 			id="dfExclusionAwareVirtualFileQualifiedNameProvider"
 			order="first"
-			implementation="df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProvider"/>
+			implementation="df.idea.feature.copy_reference.ExclusionAwareVirtualFileQualifiedNameProvider"/>
 	</extensions>
 	<applicationListeners>
 		<listener
-			class="df.idea.feature.pathmacros.ProjectPathMacroCacheInvalidator"
-			topic="com.intellij.openapi.project.ProjectCloseListener"/>
-		<listener
-			class="df.idea.feature.updatesource.LocalUpdateSourceRegistrar"
+			class="df.idea.feature.plugin_update_source.LocalUpdateSourceRegistrar"
 			topic="com.intellij.ide.AppLifecycleListener"/>
+		<listener
+			class="df.idea.feature.project_path_macro.ProjectPathMacroCacheInvalidator"
+			topic="com.intellij.openapi.project.ProjectCloseListener"/>
 	</applicationListeners>
 </idea-plugin>

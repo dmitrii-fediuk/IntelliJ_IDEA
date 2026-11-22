@@ -5,6 +5,8 @@
 # https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 # "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
 # https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+# "Standardize df.idea feature package names with snake_case word separators":
+# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 param(
 	[string]$IdeaHome = '',
 	[string]$IdeaPropertiesFile = '',
@@ -299,18 +301,18 @@ try {
 		}
 		$runCp = "$testOut;$mainOut;$ideaLibWildcard"
 		$featureTests = @(
-			'df.idea.feature.copyreference.ExclusionAwareVirtualFileQualifiedNameProviderTest',
-			'df.idea.feature.markdowncodefence.MarkdownCodeFenceBackgroundSuppressorTest',
-			'df.idea.feature.markdowncodefence.IdeMarkdownCodeFenceIntegrationTest',
-			'df.idea.feature.pathmacros.MacroPropertiesLocatorTest',
-			'df.idea.feature.pathmacros.MacroPropertiesParserTest',
-			'df.idea.feature.pathmacros.MacroPathResolverTest',
-			'df.idea.feature.pathmacros.IdePathMacroIntegrationTest',
-			'df.idea.feature.projectroots.NestedProjectRootMatcherTest',
-			'df.idea.feature.projectroots.NestedProjectRootCleanerTest',
-			'df.idea.feature.projectroots.IdeProjectRootIntegrationTest',
-			'df.idea.feature.updatesource.LocalPluginRepositoryLocatorTest',
-			'df.idea.feature.updatesource.LocalUpdateSourceRegistrarTest'
+			'df.idea.feature.copy_reference.ExclusionAwareVirtualFileQualifiedNameProviderTest',
+			'df.idea.feature.markdown_code_fence_background.MarkdownCodeFenceBackgroundSuppressorTest',
+			'df.idea.feature.markdown_code_fence_background.IdeMarkdownCodeFenceIntegrationTest',
+			'df.idea.feature.nested_project_root.NestedProjectRootMatcherTest',
+			'df.idea.feature.nested_project_root.NestedProjectRootCleanerTest',
+			'df.idea.feature.nested_project_root.IdeProjectRootIntegrationTest',
+			'df.idea.feature.plugin_update_source.LocalPluginRepositoryLocatorTest',
+			'df.idea.feature.plugin_update_source.LocalUpdateSourceRegistrarTest',
+			'df.idea.feature.project_path_macro.MacroPropertiesLocatorTest',
+			'df.idea.feature.project_path_macro.MacroPropertiesParserTest',
+			'df.idea.feature.project_path_macro.MacroPathResolverTest',
+			'df.idea.feature.project_path_macro.IdePathMacroIntegrationTest'
 		)
 		foreach ($testClass in $featureTests) {
 			& $java '-Dfile.encoding=UTF-8' '-Dstdout.encoding=UTF-8' -cp $runCp $testClass
@@ -318,7 +320,7 @@ try {
 				throw "Test suite $testClass failed with exit code $LASTEXITCODE"
 			}
 		}
-		& $java '-Dfile.encoding=UTF-8' '-Dstdout.encoding=UTF-8' -cp $runCp 'df.idea.feature.updatesource.IdeUpdateSourceIntegrationTest' $stagedJar
+		& $java '-Dfile.encoding=UTF-8' '-Dstdout.encoding=UTF-8' -cp $runCp 'df.idea.feature.plugin_update_source.IdeUpdateSourceIntegrationTest' $stagedJar
 		if (0 -ne $LASTEXITCODE) {
 			throw "Test suite IdeUpdateSourceIntegrationTest failed with exit code $LASTEXITCODE"
 		}

@@ -1,4 +1,4 @@
-# `Copy Reference` Feature (`df.idea.feature.copyreference`)
+# `Copy Reference` Feature (`df.idea.feature.copy_reference`)
 
 Fixes path resolution for `CopyReference` (`Ctrl+Q`) inside nested module content roots when an outer wrapper module declares `<excludeFolder>` over the nested directory.  
 Part of the unified [«Dmitrii Fediuk»](../.md) (`df.idea`) plugin.
@@ -8,7 +8,7 @@ Part of the unified [«Dmitrii Fediuk»](../.md) (`df.idea`) plugin.
 When no `sourceRoot` contains the file, the stock `JavaVirtualFileQualifiedNameProvider` walks upward through parent directories using `ProjectFileIndex.getContentRootForFile(each, false)` (`honorExclusion = false`).  
 For a nested module (e.g., a Magento codebase under `Ⰿ/≻/♕/⛯/𝐖/example.com/2026-10-26/⛯`) whose ancestor directory is excluded by an outer wrapper module (`<excludeFolder url="file://$MODULE_DIR$/Ⰿ/≻/♕/⛯/𝐖" />`), that stock loop ignores the exclusion and prepends the outer wrapper prefix to `CopyReference` output.
 
-[ExclusionAwareVirtualFileQualifiedNameProvider.java](../../⛯/src/main/java/df/idea/feature/copyreference/ExclusionAwareVirtualFileQualifiedNameProvider.java) registers on the `com.intellij.virtualFileQualifiedNameProvider` extension point in [plugin.xml](../../⛯/src/main/resources/META-INF/plugin.xml) with `order="first"`:
+[ExclusionAwareVirtualFileQualifiedNameProvider.java](../../⛯/src/main/java/df/idea/feature/copy_reference/ExclusionAwareVirtualFileQualifiedNameProvider.java) registers on the `com.intellij.virtualFileQualifiedNameProvider` extension point in [plugin.xml](../../⛯/src/main/resources/META-INF/plugin.xml) with `order="first"`:
 
 1. Unwraps injected fragments (`VirtualFileWindow`) via `getDelegate()`.  
 1. Checks module ownership via `index.getModuleForFile(targetFile, false)`; for external files, libraries, and scratch files (`module == null`), returns `null` so the standard `FqnUtil.getVirtualFileFqn` chain takes over.  
@@ -25,4 +25,4 @@ For a nested module (e.g., a Magento codebase under `Ⰿ/≻/♕/⛯/𝐖/exampl
 
 ## 3. Tests
 
-Unit tests (`15` assertions) reside in [ExclusionAwareVirtualFileQualifiedNameProviderTest.java](../../⛯/src/test/java/df/idea/feature/copyreference/ExclusionAwareVirtualFileQualifiedNameProviderTest.java).
+Unit tests (`15` assertions) reside in [ExclusionAwareVirtualFileQualifiedNameProviderTest.java](../../⛯/src/test/java/df/idea/feature/copy_reference/ExclusionAwareVirtualFileQualifiedNameProviderTest.java).
