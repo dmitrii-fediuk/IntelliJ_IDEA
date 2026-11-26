@@ -34,10 +34,24 @@ public final class MacroPropertiesParser {
 		@NotNull Map<String, String> entries,
 		@NotNull List<String> warnings
 	) {}
+	/**
+	 * - @used-by non-instantiable utility class
+	 */
 	private MacroPropertiesParser() {}
+	/**
+	 * - @used-by {@link MacroPathResolver#loadAndResolve(List)}
+	 */
 	public static @NotNull ParseResult parseFile(@NotNull Path file) throws IOException {
 		return parseText(Files.readString(file, StandardCharsets.UTF_8), file.toString());
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesParser#parseFile(Path)}
+	 * - @used-by {@link MacroPropertiesParserTest#testEmptyValuePreservedForUnsetAndDuplicateOverride()}
+	 * - @used-by {@link MacroPropertiesParserTest#testKeyValidationAndReservedNames()}
+	 * - @used-by {@link MacroPropertiesParserTest#testUtf8AndNonBmpParsing()}
+	 * - @used-by {@link MacroPropertiesParserTest#testUtf8BomAndCommentsAndWhitespace()}
+	 * - @used-by {@link MacroPropertiesParserTest#testWindowsBackslashesNotCorrupted()}
+	 */
 	public static @NotNull ParseResult parseText(@NotNull String content, @NotNull String sourceLabel) {
 		Map<String, String> entries = new LinkedHashMap<>();
 		List<String> warnings = new ArrayList<>();
@@ -69,9 +83,16 @@ public final class MacroPropertiesParser {
 			Collections.unmodifiableList(warnings)
 		);
 	}
+	/**
+	 * - @used-by unused
+	 */
 	static boolean isValidMacroName(@NotNull String name) {
 		return null == validateMacroName(name);
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesParser#isValidMacroName(String)}
+	 * - @used-by {@link MacroPropertiesParser#parseText(String, String)}
+	 */
 	private static String validateMacroName(@NotNull String name) {
 		String r = null;
 		if (name.isEmpty()) {

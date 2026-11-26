@@ -10,7 +10,15 @@ import org.jetbrains.annotations.Nullable;
 // "Remove nested ProjectRootEntity instances covered by module content roots":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 final class NestedProjectRootMatcher {
+	/**
+	 * - @used-by non-instantiable utility class
+	 */
 	private NestedProjectRootMatcher() {}
+	/**
+	 * - @used-by {@link NestedProjectRootMatcher#isStrictlyCovered(String, Iterable, boolean)}
+	 * - @used-by {@link NestedProjectRootMatcherTest#testCaseSensitivity()}
+	 * - @used-by {@link NestedProjectRootMatcherTest#testStrictDescendant()}
+	 */
 	static boolean isStrictDescendant(
 		@Nullable String candidateUrl,
 		@Nullable String ancestorUrl,
@@ -27,6 +35,10 @@ final class NestedProjectRootMatcher {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleaner#findRedundantProjectRoots(EntityStorage, ProjectRootEntityAdapter, boolean)}
+	 * - @used-by {@link NestedProjectRootMatcherTest#testCoveredSet()}
+	 */
 	static boolean isStrictlyCovered(
 		@Nullable String projectRootUrl,
 		@NotNull Iterable<String> contentRootUrls,
@@ -44,6 +56,12 @@ final class NestedProjectRootMatcher {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleaner#collectContentRootUrls(EntityStorage)}
+	 * - @used-by {@link NestedProjectRootMatcher#isStrictDescendant(String, String, boolean)}
+	 * - @used-by {@link NestedProjectRootMatcher#isStrictlyCovered(String, Iterable, boolean)}
+	 * - @used-by {@link NestedProjectRootMatcherTest#testNormalization()}
+	 */
 	static @Nullable String normalizeUrl(@Nullable String rawUrl) {
 		String r = null;
 		if (null != rawUrl && !rawUrl.isBlank()) {

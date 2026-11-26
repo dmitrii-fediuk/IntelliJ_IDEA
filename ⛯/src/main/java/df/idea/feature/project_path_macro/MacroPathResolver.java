@@ -36,14 +36,38 @@ public final class MacroPathResolver {
 	private static final MacroPathResolver SHARED = new MacroPathResolver(LOG::warn);
 	private final Consumer<String> warningSink;
 	private final ConcurrentHashMap<String, CachedMacros> cache = new ConcurrentHashMap<>();
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#testMultipleNestedVariablesChooseLongestMatchOnSave()}
+	 * - @used-by {@link MacroPathResolverTest#testCacheHitInvalidationAndEviction()}
+	 * - @used-by {@link MacroPathResolverTest#testCrossVariableCompositionAndForwardRefs()}
+	 * - @used-by {@link MacroPathResolverTest#testCycleAndUndefinedReferenceHandling()}
+	 * - @used-by {@link MacroPathResolverTest#testDirectoryNamedPropertiesIgnoredSafely()}
+	 * - @used-by {@link MacroPathResolverTest#testLayeredOuterAndInnerInheritanceOverrideAndUnset()}
+	 * - @used-by {@link MacroPathResolverTest#testRelativeAndAbsoluteResolutionWithUnicode()}
+	 */
 	MacroPathResolver(@NotNull Consumer<String> warningSink) {
 		this.warningSink = Objects.requireNonNull(warningSink, "warningSink");
 	}
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#testNestedImlAndProjectXmlRoundTrip()}
+	 * - @used-by {@link MacroPathResolverTest#testCacheHitInvalidationAndEviction()}
+	 * - @used-by {@link ProjectPathMacroCacheInvalidator#projectClosed(Project)}
+	 */
 	public void evict(@Nullable String projectFilePath) {
 		if (null != projectFilePath && !projectFilePath.isBlank()) {
 			cache.remove(normalizeCacheKey(projectFilePath));
 		}
 	}
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#testMultipleNestedVariablesChooseLongestMatchOnSave()}
+	 * - @used-by {@link MacroPathResolverTest#testCacheHitInvalidationAndEviction()}
+	 * - @used-by {@link MacroPathResolverTest#testCrossVariableCompositionAndForwardRefs()}
+	 * - @used-by {@link MacroPathResolverTest#testCycleAndUndefinedReferenceHandling()}
+	 * - @used-by {@link MacroPathResolverTest#testDirectoryNamedPropertiesIgnoredSafely()}
+	 * - @used-by {@link MacroPathResolverTest#testLayeredOuterAndInnerInheritanceOverrideAndUnset()}
+	 * - @used-by {@link MacroPathResolverTest#testRelativeAndAbsoluteResolutionWithUnicode()}
+	 * - @used-by {@link ProjectPropertiesPathMacroContributor#getProjectPathMacros(String)}
+	 */
 	public @NotNull Map<String, String> resolveForProject(@Nullable String projectFilePath) {
 		Map<String, String> r = Map.of();
 		if (null != projectFilePath && !projectFilePath.isBlank()) {
@@ -66,12 +90,23 @@ public final class MacroPathResolver {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#testNestedImlAndProjectXmlRoundTrip()}
+	 * - @used-by {@link ProjectPathMacroCacheInvalidator#projectClosed(Project)}
+	 * - @used-by {@link ProjectPropertiesPathMacroContributor#getProjectPathMacros(String)}
+	 */
 	public static @NotNull MacroPathResolver shared() {
 		return SHARED;
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#testCacheHitInvalidationAndEviction()}
+	 */
 	int cacheSize() {
 		return cache.size();
 	}
+	/**
+	 * - @used-by {@link MacroPathResolver#normalizeMacroPath(String, Path, Path, String)}
+	 */
 	static @NotNull String trimTrailingSlash(@NotNull String path) {
 		String r = path;
 		while (1 < r.length() && r.endsWith("/")) {
@@ -82,6 +117,9 @@ public final class MacroPathResolver {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link MacroPathResolver#resolveForProject(String)}
+	 */
 	private static @NotNull List<FileStamp> captureStamps(@NotNull List<Path> candidates) {
 		List<FileStamp> stamps = new ArrayList<>(candidates.size());
 		for (Path candidate : candidates) {
@@ -89,6 +127,9 @@ public final class MacroPathResolver {
 		}
 		return List.copyOf(stamps);
 	}
+	/**
+	 * - @used-by {@link MacroPathResolver#resolveKey(String, Map, Map, Set, Set)}
+	 */
 	private @Nullable String expandReferences(
 		@NotNull RawEntry entry,
 		@NotNull Map<String, RawEntry> rawEntries,
@@ -131,6 +172,9 @@ public final class MacroPathResolver {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link MacroPathResolver#resolveForProject(String)}
+	 */
 	private @NotNull Map<String, String> loadAndResolve(@NotNull List<FileStamp> stamps) {
 		Map<String, String> r = Map.of();
 		Map<String, RawEntry> mergedRaw = new LinkedHashMap<>();
@@ -179,9 +223,16 @@ public final class MacroPathResolver {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link MacroPathResolver#evict(String)}
+	 * - @used-by {@link MacroPathResolver#resolveForProject(String)}
+	 */
 	private static @NotNull String normalizeCacheKey(@NotNull String projectFilePath) {
 		return projectFilePath.replace('\\', '/');
 	}
+	/**
+	 * - @used-by {@link MacroPathResolver#resolveKey(String, Map, Map, Set, Set)}
+	 */
 	private @Nullable String normalizeMacroPath(
 		@NotNull String rawPath,
 		@NotNull Path baseDir,
@@ -203,6 +254,10 @@ public final class MacroPathResolver {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link MacroPathResolver#expandReferences(RawEntry, Map, Map, Set, Set)}
+	 * - @used-by {@link MacroPathResolver#loadAndResolve(List)}
+	 */
 	private @Nullable String resolveKey(
 		@NotNull String key,
 		@NotNull Map<String, RawEntry> rawEntries,
@@ -258,6 +313,9 @@ public final class MacroPathResolver {
 		@Nullable FileTime lastModifiedTime,
 		long size
 	) {
+		/**
+		 * - @used-by {@link MacroPathResolver#captureStamps(List)}
+		 */
 		static @NotNull FileStamp capture(@NotNull Path path) {
 			FileStamp r = new FileStamp(path, false, null, -1L);
 			try {

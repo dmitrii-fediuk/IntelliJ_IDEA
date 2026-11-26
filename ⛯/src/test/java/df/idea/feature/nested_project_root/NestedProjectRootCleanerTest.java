@@ -55,11 +55,18 @@ import org.jetbrains.annotations.Nullable;
 public final class NestedProjectRootCleanerTest {
 	private static final Assertions A = new Assertions();
 	private static final EntitySource TEST_SOURCE = new EntitySource() {
+		/**
+		 * - @used-by {@link NestedProjectRootCleanerTest}
+		 * @see EntitySource#getVirtualFileUrl()
+		 */
 		@Override
 		public @Nullable VirtualFileUrl getVirtualFileUrl() {
 			return null;
 		}
 	};
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		testDisposedAndNullGuards();
 		testEventRelevance();
@@ -68,6 +75,11 @@ public final class NestedProjectRootCleanerTest {
 		testResilienceAndCancellation();
 		System.out.println("NESTED_PROJECT_ROOT_CLEANER_TESTS_PASSED (" + A.passedCount() + " assertions)");
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#testEventRelevance()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testPlainFlowFallback()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+	 */
 	private static void addModuleWithContent(
 		MutableEntityStorage storage,
 		VirtualFileUrlManager urlManager,
@@ -90,6 +102,11 @@ public final class NestedProjectRootCleanerTest {
 		);
 		storage.addEntity(module);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#testEventRelevance()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testPlainFlowFallback()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+	 */
 	private static ProjectRootEntity addProjectRoot(
 		MutableEntityStorage storage,
 		VirtualFileUrlManager urlManager,
@@ -102,6 +119,10 @@ public final class NestedProjectRootCleanerTest {
 			)
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#addModuleWithContent(MutableEntityStorage, VirtualFileUrlManager, String, String)}
+	 * - @used-by {@link NestedProjectRootCleanerTest#addProjectRoot(MutableEntityStorage, VirtualFileUrlManager, String)}
+	 */
 	private static VirtualFileUrl createUrl(VirtualFileUrlManager urlManager, String url) throws Exception {
 		Method factory;
 		try {
@@ -112,6 +133,11 @@ public final class NestedProjectRootCleanerTest {
 		}
 		return (VirtualFileUrl) factory.invoke(urlManager, url);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#testDisposedAndNullGuards()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testPlainFlowFallback()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+	 */
 	private static Project fakeProject(AtomicBoolean disposed) {
 		return (Project) Proxy.newProxyInstance(
 			NestedProjectRootCleanerTest.class.getClassLoader(),
@@ -131,6 +157,10 @@ public final class NestedProjectRootCleanerTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#testEventRelevance()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+	 */
 	private static VersionedStorageChange fakeStorageChange(
 		ImmutableEntityStorage before,
 		ImmutableEntityStorage after,
@@ -158,6 +188,11 @@ public final class NestedProjectRootCleanerTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#testDisposedAndNullGuards()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testPlainFlowFallback()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+	 */
 	private static WorkspaceModel fakeWorkspaceModel(
 		AtomicReference<ImmutableEntityStorage> snapshotRef,
 		Flow<VersionedStorageChange> eventLog,
@@ -191,6 +226,10 @@ public final class NestedProjectRootCleanerTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#testPlainFlowFallback()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+	 */
 	private static List<String> listProjectRootUrls(ImmutableEntityStorage storage, ProjectRootEntityAdapter adapter) {
 		List<String> r = new ArrayList<>();
 		var it = storage.entities(adapter.entityClass()).iterator();
@@ -200,6 +239,9 @@ public final class NestedProjectRootCleanerTest {
 		Collections.sort(r);
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#main(String[])}
+	 */
 	private static void testDisposedAndNullGuards() throws Exception {
 		ProjectRootEntityAdapter adapter = ProjectRootEntityAdapter.Reflective.tryBind();
 		A.assertTrue("reflective adapter binds to ProjectRootEntity", null != adapter);
@@ -221,6 +263,9 @@ public final class NestedProjectRootCleanerTest {
 		A.assertEquals("disposed project returns Unit without updating", Unit.INSTANCE, disposedResult);
 		A.assertEquals("disposed project triggers zero updates", 0, updates.get());
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#main(String[])}
+	 */
 	private static void testEventRelevance() throws Exception {
 		ProjectRootEntityAdapter adapter = ProjectRootEntityAdapter.Reflective.tryBind();
 		A.assertTrue("adapter available for event relevance test", null != adapter);
@@ -257,6 +302,9 @@ public final class NestedProjectRootCleanerTest {
 		VersionedStorageChange emptyChange = fakeStorageChange(snap, snap, Collections.emptyMap());
 		A.assertEquals("unrelated empty change is ignored", false, NestedProjectRootCleaner.hasRelevantChanges(emptyChange, adapter));
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#main(String[])}
+	 */
 	private static void testPlainFlowFallback() throws Exception {
 		ProjectRootEntityAdapter adapter = ProjectRootEntityAdapter.Reflective.tryBind();
 		A.assertTrue("adapter available for plain flow test", null != adapter);
@@ -282,6 +330,9 @@ public final class NestedProjectRootCleanerTest {
 			listProjectRootUrls(snapRef.get(), adapter)
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#main(String[])}
+	 */
 	private static void testReflectiveAdapterDegradation() {
 		ClassLoader cl = NestedProjectRootCleanerTest.class.getClassLoader();
 		A.assertEquals(
@@ -300,15 +351,26 @@ public final class NestedProjectRootCleanerTest {
 			ProjectRootEntityAdapter.Reflective.tryBind(cl, ContentRootEntity.class.getName())
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#main(String[])}
+	 */
 	private static void testResilienceAndCancellation() throws Exception {
 		ProjectRootEntityAdapter realAdapter = ProjectRootEntityAdapter.Reflective.tryBind();
 		A.assertTrue("real adapter available", null != realAdapter);
 		AtomicBoolean shouldFail = new AtomicBoolean(true);
 		ProjectRootEntityAdapter flakyAdapter = new ProjectRootEntityAdapter() {
+			/**
+			 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+			 * @see ProjectRootEntityAdapter#entityClass()
+			 */
 			@Override
 			public @NotNull Class<? extends WorkspaceEntity> entityClass() {
 				return realAdapter.entityClass();
 			}
+			/**
+			 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+			 * @see ProjectRootEntityAdapter#getRootUrl(WorkspaceEntity)
+			 */
 			@Override
 			public @Nullable String getRootUrl(@NotNull WorkspaceEntity entity) {
 				if (shouldFail.get()) {

@@ -31,6 +31,11 @@ public final class LocalUpdateSourceRegistrar implements AppLifecycleListener {
 		API_UNAVAILABLE,
 		FAILED
 	}
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link AppLifecycleListener#appFrameCreated(List)}
+	 * @see AppLifecycleListener#appFrameCreated(List)
+	 */
 	@Override
 	public void appFrameCreated(@NotNull List<String> commandLineArgs) {
 		Application app = ApplicationManager.getApplication();
@@ -62,6 +67,9 @@ public final class LocalUpdateSourceRegistrar implements AppLifecycleListener {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrar#reconcile(PluginUpdateSourceClient, String)}
+	 */
 	static boolean isStaleLocalRepositoryUrl(@Nullable String host) {
 		boolean r = false;
 		if (null != host && host.startsWith("file:")) {
@@ -80,6 +88,13 @@ public final class LocalUpdateSourceRegistrar implements AppLifecycleListener {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdeUpdateSourceIntegrationTest#verifyPlatformUpdateSourceContract(String)}
+	 * - @used-by {@link LocalUpdateSourceRegistrar#appFrameCreated(List)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testMultiInstanceIsolation(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReflectiveBridgeAcross2026_3And2026_2_5(Path)}
+	 */
 	static @NotNull Status reconcile(
 		@Nullable PluginUpdateSourceClient client,
 		@Nullable String repositoryUrl

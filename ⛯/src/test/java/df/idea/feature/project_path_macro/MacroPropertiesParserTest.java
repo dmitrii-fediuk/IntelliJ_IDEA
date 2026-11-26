@@ -10,6 +10,9 @@ import java.util.Map;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class MacroPropertiesParserTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) {
 		testUtf8AndNonBmpParsing();
 		testUtf8BomAndCommentsAndWhitespace();
@@ -18,6 +21,9 @@ public final class MacroPropertiesParserTest {
 		testEmptyValuePreservedForUnsetAndDuplicateOverride();
 		System.out.println("MACRO_PARSER_TESTS_PASSED=" + A.passedCount());
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesParserTest#main(String[])}
+	 */
 	private static void testEmptyValuePreservedForUnsetAndDuplicateOverride() {
 		String text = "df.m=../first\n"
 			+ "df.m=../second\n"
@@ -26,6 +32,9 @@ public final class MacroPropertiesParserTest {
 		A.assertEquals("duplicate key takes last value", "../second", res.entries().get("df.m"));
 		A.assertEquals("empty value preserved for unset", "", res.entries().get("df.unset"));
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesParserTest#main(String[])}
+	 */
 	private static void testKeyValidationAndReservedNames() {
 		String text = "df.m=../ok\n"
 			+ "bad..name=../nope\n"
@@ -38,6 +47,9 @@ public final class MacroPropertiesParserTest {
 		A.assertEquals("only valid df.m kept", Map.of("df.m", "../ok"), res.entries());
 		A.assertEquals("six invalid lines produced six warnings", 6, res.warnings().size());
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesParserTest#main(String[])}
+	 */
 	private static void testUtf8AndNonBmpParsing() {
 		String text = "df.m=../Ⰿ/≻/♕/⛯/𝐖/example.com/2026-10-26/⛯\n"
 			+ "df.p=../Ⰿ/≻/♕/⛯/𝐏\n"
@@ -48,6 +60,9 @@ public final class MacroPropertiesParserTest {
 		A.assertEquals("df.p parsed with non-BMP 𝐏", "../Ⰿ/≻/♕/⛯/𝐏", res.entries().get("df.p"));
 		A.assertEquals("df-k_1 parsed", "../ꘖ/KB", res.entries().get("df-k_1"));
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesParserTest#main(String[])}
+	 */
 	private static void testUtf8BomAndCommentsAndWhitespace() {
 		String text = "\uFEFF# leading comment\r\n"
 			+ "  ! second comment\r\n"
@@ -61,6 +76,9 @@ public final class MacroPropertiesParserTest {
 			res.entries().get("df.m")
 		);
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesParserTest#main(String[])}
+	 */
 	private static void testWindowsBackslashesNotCorrupted() {
 		String text = "df.u=C:\\users\\test\\foo\\new\n"
 			+ "df.rel=..\\bar\\baz\n";

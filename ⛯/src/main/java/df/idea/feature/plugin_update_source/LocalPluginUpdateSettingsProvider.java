@@ -12,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class LocalPluginUpdateSettingsProvider implements UpdateSettingsProvider {
 	private static final Logger LOG = Logger.getInstance(LocalPluginUpdateSettingsProvider.class);
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link UpdateSettingsProvider#getPluginRepositories()}
+	 * @see UpdateSettingsProvider#getPluginRepositories()
+	 */
 	@Override
 	public @NotNull List<String> getPluginRepositories() {
 		List<String> r = List.of();

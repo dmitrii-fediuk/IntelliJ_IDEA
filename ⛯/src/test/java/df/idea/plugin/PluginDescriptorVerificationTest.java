@@ -81,6 +81,9 @@ public final class PluginDescriptorVerificationTest {
 	private static final String PROJECT_PATH_MACRO_IMPL = "df.idea.feature.project_path_macro.ProjectPropertiesPathMacroContributor";
 	private static final String PROJECT_PATH_MACRO_CACHE_INVALIDATOR_IMPL = "df.idea.feature.project_path_macro.ProjectPathMacroCacheInvalidator";
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		if (1 > args.length) {
 			throw new IllegalArgumentException(
@@ -102,6 +105,10 @@ public final class PluginDescriptorVerificationTest {
 			System.out.println("DESCRIPTOR_VERIFICATION_PASSED=" + jarPath + " (" + A.passedCount() + " assertions)");
 		}
 	}
+	/**
+	 * - @used-by {@link PluginDescriptorVerificationTest#main(String[])}
+	 * - @used-by {@link PluginDescriptorVerificationTest#verifyViaIdeaProperties()}
+	 */
 	private static void verifyDescriptor(PluginMainDescriptor descriptor, Path jarPath) throws Exception {
 		A.assertEquals("full pluginId", PLUGIN_ID, descriptor.getPluginId().getIdString());
 		A.assertEquals("full plugin name", PLUGIN_NAME, descriptor.getName());
@@ -217,6 +224,9 @@ public final class PluginDescriptorVerificationTest {
 			A.assertTrue("loaded class implements AppLifecycleListener", registrarInstance instanceof AppLifecycleListener);
 		}
 	}
+	/**
+	 * - @used-by {@link PluginDescriptorVerificationTest#main(String[])}
+	 */
 	private static void verifyViaIdeaProperties() throws Exception {
 		PathManager.loadProperties();
 		String pluginPath = System.getProperty("plugin.path");

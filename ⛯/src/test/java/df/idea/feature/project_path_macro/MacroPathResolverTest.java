@@ -18,6 +18,9 @@ import java.util.Map;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class MacroPathResolverTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		testRelativeAndAbsoluteResolutionWithUnicode();
 		testCrossVariableCompositionAndForwardRefs();
@@ -27,6 +30,14 @@ public final class MacroPathResolverTest {
 		testDirectoryNamedPropertiesIgnoredSafely();
 		System.out.println("MACRO_RESOLVER_TESTS_PASSED=" + A.passedCount());
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#testCacheHitInvalidationAndEviction()}
+	 * - @used-by {@link MacroPathResolverTest#testCrossVariableCompositionAndForwardRefs()}
+	 * - @used-by {@link MacroPathResolverTest#testCycleAndUndefinedReferenceHandling()}
+	 * - @used-by {@link MacroPathResolverTest#testDirectoryNamedPropertiesIgnoredSafely()}
+	 * - @used-by {@link MacroPathResolverTest#testLayeredOuterAndInnerInheritanceOverrideAndUnset()}
+	 * - @used-by {@link MacroPathResolverTest#testRelativeAndAbsoluteResolutionWithUnicode()}
+	 */
 	private static void deleteTree(Path root) throws IOException {
 		if (Files.exists(root)) {
 			try (var stream = Files.walk(root)) {
@@ -37,6 +48,9 @@ public final class MacroPathResolverTest {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#main(String[])}
+	 */
 	private static void testCacheHitInvalidationAndEviction() throws IOException {
 		Path tmp = Files.createTempDirectory("df-macro-cache-");
 		try {
@@ -68,6 +82,9 @@ public final class MacroPathResolverTest {
 			deleteTree(tmp);
 		}
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#main(String[])}
+	 */
 	private static void testCrossVariableCompositionAndForwardRefs() throws IOException {
 		Path tmp = Files.createTempDirectory("df-macro-comp-");
 		try {
@@ -93,6 +110,9 @@ public final class MacroPathResolverTest {
 			deleteTree(tmp);
 		}
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#main(String[])}
+	 */
 	private static void testCycleAndUndefinedReferenceHandling() throws IOException {
 		Path tmp = Files.createTempDirectory("df-macro-err-");
 		try {
@@ -117,6 +137,9 @@ public final class MacroPathResolverTest {
 			deleteTree(tmp);
 		}
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#main(String[])}
+	 */
 	private static void testDirectoryNamedPropertiesIgnoredSafely() throws IOException {
 		Path tmp = Files.createTempDirectory("df-macro-dir-");
 		try {
@@ -130,6 +153,9 @@ public final class MacroPathResolverTest {
 			deleteTree(tmp);
 		}
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#main(String[])}
+	 */
 	private static void testLayeredOuterAndInnerInheritanceOverrideAndUnset() throws IOException {
 		Path tmp = Files.createTempDirectory("df-macro-layer-");
 		try {
@@ -164,6 +190,9 @@ public final class MacroPathResolverTest {
 			deleteTree(tmp);
 		}
 	}
+	/**
+	 * - @used-by {@link MacroPathResolverTest#main(String[])}
+	 */
 	private static void testRelativeAndAbsoluteResolutionWithUnicode() throws IOException {
 		Path tmp = Files.createTempDirectory("df-macro-rel-");
 		try {

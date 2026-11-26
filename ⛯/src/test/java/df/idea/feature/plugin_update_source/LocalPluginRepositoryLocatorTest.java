@@ -16,6 +16,9 @@ import java.util.stream.Stream;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class LocalPluginRepositoryLocatorTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		// 2026-11-22
 		// "Standardize df.idea feature package names with snake_case word separators":
@@ -32,6 +35,9 @@ public final class LocalPluginRepositoryLocatorTest {
 		}
 		System.out.println("LOCATOR_UPDATE_SOURCE_TESTS_PASSED (" + A.passedCount() + " assertions)");
 	}
+	/**
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#main(String[])}
+	 */
 	private static void deleteRecursively(Path root) throws IOException {
 		if (Files.exists(root)) {
 			try (Stream<Path> walk = Files.walk(root)) {
@@ -41,6 +47,9 @@ public final class LocalPluginRepositoryLocatorTest {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#main(String[])}
+	 */
 	private static void testDirectoryLayout(Path tempRoot) throws Exception {
 		Path dirInside = tempRoot.resolve("dir-inside");
 		Files.createDirectories(dirInside);
@@ -56,6 +65,9 @@ public final class LocalPluginRepositoryLocatorTest {
 		Path resolvedParent = LocalPluginRepositoryLocator.resolveRepositoryFile(childDir);
 		A.assertTrue("falls back to parent directory updatePlugins.xml", null != resolvedParent && Files.isSameFile(parentXml, resolvedParent));
 	}
+	/**
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#main(String[])}
+	 */
 	private static void testLocatePluginArtifactFallback(Path tempRoot) throws Exception {
 		Path preferred = tempRoot.resolve("preferred.jar");
 		Path chosen = LocalPluginRepositoryLocator.locatePluginArtifact(() -> preferred, LocalPluginRepositoryLocator.class);
@@ -67,6 +79,9 @@ public final class LocalPluginRepositoryLocatorTest {
 		}, LocalPluginRepositoryLocator.class);
 		A.assertTrue("falls back to CodeSource when descriptor supplier throws", null != afterException && Files.exists(afterException));
 	}
+	/**
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#main(String[])}
+	 */
 	private static void testMissingUpdateXmlReturnsNull(Path tempRoot) throws Exception {
 		Path dir = tempRoot.resolve("missing-xml");
 		Files.createDirectories(dir);
@@ -76,6 +91,9 @@ public final class LocalPluginRepositoryLocatorTest {
 		A.assertEquals("null plugin location returns null", null, LocalPluginRepositoryLocator.resolveRepositoryFile(null));
 		A.assertEquals("non-existent path returns null", null, LocalPluginRepositoryLocator.resolveRepositoryFile(dir.resolve("absent.jar")));
 	}
+	/**
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#main(String[])}
+	 */
 	private static void testSiblingFileInNonBmpPath(Path tempRoot) throws Exception {
 		Path outDir = tempRoot
 			.resolve("IntelliJ IDEA")

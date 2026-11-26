@@ -10,6 +10,11 @@ import org.jetbrains.annotations.NotNull;
 // "Initialize standalone df.idea IntelliJ IDEA plugin repository":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class ProjectPathMacroCacheInvalidator implements ProjectCloseListener {
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link ProjectCloseListener#projectClosed(Project)}
+	 * @see ProjectCloseListener#projectClosed(Project)
+	 */
 	@Override
 	public void projectClosed(@NotNull Project project) {
 		MacroPathResolver.shared().evict(project.getProjectFilePath());

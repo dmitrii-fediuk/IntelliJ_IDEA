@@ -47,6 +47,9 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 		"INJECTED_LANGUAGE_FRAGMENT"
 	);
 	private static final CustomHighlighterRenderer DUMMY_RENDERER = (editor, highlighter, graphics) -> {};
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) {
 		testTargetMatching();
 		testSuppressIfTargetAndIdempotency();
@@ -57,6 +60,9 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 			"MARKDOWN_CODE_FENCE_SUPPRESSOR_TESTS_PASSED=" + A.passedCount() + " assertions"
 		);
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 */
 	private static @NotNull Editor fakeEditor(@Nullable MarkupModel markupModel, boolean disposed) {
 		return (Editor) Proxy.newProxyInstance(
 			Editor.class.getClassLoader(),
@@ -83,9 +89,19 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 */
 	private static @NotNull EditorFactoryEvent fakeEditorEvent(@NotNull Editor editor) {
 		return new EditorFactoryEvent(new StubEditorFactory(), editor);
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testAttachAndListenerEvents()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testSuppressExistingAndErrorResilience()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testSuppressIfTargetAndIdempotency()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testTargetMatching()}
+	 */
 	private static @NotNull RangeHighlighterEx fakeHighlighter(
 		@Nullable TextAttributesKey key,
 		@Nullable CustomHighlighterRenderer initialRenderer,
@@ -133,6 +149,10 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testAttachAndListenerEvents()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 */
 	private static @NotNull MarkupModelEx fakeMarkupModelEx(
 		@NotNull List<RangeHighlighter> highlighters,
 		@NotNull List<MarkupModelListener> listeners,
@@ -160,6 +180,10 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testAttachAndListenerEvents()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testSuppressExistingAndErrorResilience()}
+	 */
 	private static @NotNull MarkupModel fakePlainMarkupModel(@NotNull List<RangeHighlighter> highlighters) {
 		return (MarkupModel) Proxy.newProxyInstance(
 			MarkupModel.class.getClassLoader(),
@@ -169,6 +193,9 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 				: null
 		);
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#main(String[])}
+	 */
 	private static void testAttachAndListenerEvents() {
 		List<RangeHighlighter> existing = new ArrayList<>();
 		RangeHighlighterEx preExistingTarget = fakeHighlighter(TARGET_KEY, DUMMY_RENDERER, true, null, false, null);
@@ -235,6 +262,9 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 			MarkdownCodeFenceBackgroundSuppressor.attach(fakeMarkupModelEx(existing, new ArrayList<>(), true))
 		);
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#main(String[])}
+	 */
 	private static void testEditorListenerLifecycle() {
 		MarkdownCodeFenceBackgroundEditorListener editorListener = new MarkdownCodeFenceBackgroundEditorListener();
 		List<RangeHighlighter> highlighters = new ArrayList<>();
@@ -260,6 +290,9 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 		editorListener.attachEditor(null);
 		A.assertEquals("null editor calls keep subscription count 0", 0, editorListener.activeSubscriptionCount());
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#main(String[])}
+	 */
 	private static void testSuppressExistingAndErrorResilience() {
 		List<RangeHighlighter> list = new ArrayList<>();
 		RangeHighlighterEx t1 = fakeHighlighter(TARGET_KEY, DUMMY_RENDERER, true, null, false, null);
@@ -275,6 +308,9 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 		A.assertEquals("non-target CODE_FENCE keeps renderer", DUMMY_RENDERER, other.getCustomRenderer());
 		A.assertEquals("suppressExisting on null returns 0", 0, MarkdownCodeFenceBackgroundSuppressor.suppressExisting(null));
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#main(String[])}
+	 */
 	private static void testSuppressIfTargetAndIdempotency() {
 		AtomicInteger calls = new AtomicInteger();
 		RangeHighlighterEx target = fakeHighlighter(TARGET_KEY, DUMMY_RENDERER, true, calls, false, null);
@@ -295,6 +331,9 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 		A.assertTrue("unrelated key is not suppressed", !MarkdownCodeFenceBackgroundSuppressor.suppressIfTarget(unrelated));
 		A.assertTrue("unrelated renderer untouched", !nonTargetTouched.get());
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#main(String[])}
+	 */
 	private static void testTargetMatching() {
 		A.assertTrue("null highlighter is not target", !MarkdownCodeFenceBackgroundSuppressor.isTargetHighlighter(null));
 		A.assertTrue(
@@ -335,47 +374,95 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 		);
 	}
 	private static final class StubEditorFactory extends EditorFactory {
+		/**
+		 * - @used-by {@link EditorFactory#addEditorFactoryListener(EditorFactoryListener)}
+		 * @see EditorFactory#addEditorFactoryListener(EditorFactoryListener)
+		 */
 		@SuppressWarnings("removal")
 		@Override
 		public void addEditorFactoryListener(@NotNull EditorFactoryListener listener) {}
+		/**
+		 * - @used-by {@link EditorFactory#addEditorFactoryListener(EditorFactoryListener, Disposable)}
+		 * @see EditorFactory#addEditorFactoryListener(EditorFactoryListener, Disposable)
+		 */
 		@Override
 		public void addEditorFactoryListener(@NotNull EditorFactoryListener listener, @NotNull Disposable parentDisposable) {}
+		/**
+		 * - @used-by {@link EditorFactory#createDocument(CharSequence)}
+		 * @see EditorFactory#createDocument(CharSequence)
+		 */
 		@Override
 		public @NotNull Document createDocument(@NotNull CharSequence text) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createDocument(char[])}
+		 * @see EditorFactory#createDocument(char[])
+		 */
 		@Override
 		public @NotNull Document createDocument(char[] text) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createDocument(boolean)}
+		 * @see EditorFactory#createDocument(boolean)
+		 */
 		@Override
 		public @NotNull Document createDocument(boolean allowUpdatesWithoutWriteAction) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createDocument(CharSequence, boolean, boolean)}
+		 * @see EditorFactory#createDocument(CharSequence, boolean, boolean)
+		 */
 		@Override
 		public @NotNull Document createDocument(@NotNull CharSequence text, boolean acceptsSlashR, boolean allowUpdatesWithoutWriteAction) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createEditor(Document)}
+		 * @see EditorFactory#createEditor(Document)
+		 */
 		@Override
 		public Editor createEditor(@NotNull Document document) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createEditor(Document, Project)}
+		 * @see EditorFactory#createEditor(Document, Project)
+		 */
 		@Override
 		public Editor createEditor(@NotNull Document document, @Nullable Project project) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createEditor(Document, Project, EditorKind)}
+		 * @see EditorFactory#createEditor(Document, Project, EditorKind)
+		 */
 		@Override
 		public Editor createEditor(@NotNull Document document, @Nullable Project project, @NotNull EditorKind kind) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createEditor(Document, Project, FileType, boolean)}
+		 * @see EditorFactory#createEditor(Document, Project, FileType, boolean)
+		 */
 		@Override
 		public Editor createEditor(@NotNull Document document, @Nullable Project project, @NotNull FileType fileType, boolean isViewer) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createEditor(Document, Project, VirtualFile, boolean)}
+		 * @see EditorFactory#createEditor(Document, Project, VirtualFile, boolean)
+		 */
 		@Override
 		public Editor createEditor(@NotNull Document document, @Nullable Project project, @NotNull VirtualFile file, boolean isViewer) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createEditor(Document, Project, VirtualFile, boolean, EditorKind)}
+		 * @see EditorFactory#createEditor(Document, Project, VirtualFile, boolean, EditorKind)
+		 */
 		@Override
 		public Editor createEditor(
 			@NotNull Document document,
@@ -386,38 +473,78 @@ public final class MarkdownCodeFenceBackgroundSuppressorTest {
 		) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createViewer(Document)}
+		 * @see EditorFactory#createViewer(Document)
+		 */
 		@Override
 		public Editor createViewer(@NotNull Document document) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createViewer(Document, Project)}
+		 * @see EditorFactory#createViewer(Document, Project)
+		 */
 		@Override
 		public Editor createViewer(@NotNull Document document, @Nullable Project project) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#createViewer(Document, Project, EditorKind)}
+		 * @see EditorFactory#createViewer(Document, Project, EditorKind)
+		 */
 		@Override
 		public Editor createViewer(@NotNull Document document, @Nullable Project project, @NotNull EditorKind kind) {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#editors(Document, Project)}
+		 * @see EditorFactory#editors(Document, Project)
+		 */
 		@Override
 		public @NotNull Stream<Editor> editors(@NotNull Document document, @Nullable Project project) {
 			return Stream.empty();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#getAllEditors()}
+		 * @see EditorFactory#getAllEditors()
+		 */
 		@Override
 		public Editor @NotNull [] getAllEditors() {
 			return new Editor[0];
 		}
+		/**
+		 * - @used-by {@link EditorFactory#getEditorList()}
+		 * @see EditorFactory#getEditorList()
+		 */
 		@Override
 		public @NotNull List<Editor> getEditorList() {
 			return List.of();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#getEventMulticaster()}
+		 * @see EditorFactory#getEventMulticaster()
+		 */
 		@Override
 		public @NotNull EditorEventMulticaster getEventMulticaster() {
 			throw new UnsupportedOperationException();
 		}
+		/**
+		 * - @used-by {@link EditorFactory#refreshAllEditors()}
+		 * @see EditorFactory#refreshAllEditors()
+		 */
 		@Override
 		public void refreshAllEditors() {}
+		/**
+		 * - @used-by {@link EditorFactory#releaseEditor(Editor)}
+		 * @see EditorFactory#releaseEditor(Editor)
+		 */
 		@Override
 		public void releaseEditor(@NotNull Editor editor) {}
+		/**
+		 * - @used-by {@link EditorFactory#removeEditorFactoryListener(EditorFactoryListener)}
+		 * @see EditorFactory#removeEditorFactoryListener(EditorFactoryListener)
+		 */
 		@SuppressWarnings("removal")
 		@Override
 		public void removeEditorFactoryListener(@NotNull EditorFactoryListener listener) {}

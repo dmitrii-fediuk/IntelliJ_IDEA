@@ -16,26 +16,71 @@ import org.jetbrains.annotations.Nullable;
 // "Initialize standalone df.idea IntelliJ IDEA plugin repository":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 interface PluginUpdateSourceClient {
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrar#reconcile(PluginUpdateSourceClient, String)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest.FakeClient#getCurrentSourceHost(PluginId)}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective#getCurrentSourceHost(PluginId)}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+	 */
 	@Nullable String getCurrentSourceHost(@NotNull PluginId pluginId);
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrar#reconcile(PluginUpdateSourceClient, String)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReflectiveBridgeAcross2026_3And2026_2_5(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest.FakeClient#isSupported()}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective#isSupported()}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+	 */
 	boolean isSupported();
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrar#reconcile(PluginUpdateSourceClient, String)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest.FakeClient#matchesCustomRepository(PluginId, String)}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective#matchesCustomRepository(PluginId, String)}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+	 */
 	boolean matchesCustomRepository(@NotNull PluginId pluginId, @NotNull String repositoryUrl);
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrar#reconcile(PluginUpdateSourceClient, String)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest.FakeClient#setCustomRepositorySource(PluginId, String)}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective#setCustomRepositorySource(PluginId, String)}
+	 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+	 */
 	void setCustomRepositorySource(@NotNull PluginId pluginId, @NotNull String repositoryUrl);
 	final class Reflective implements PluginUpdateSourceClient {
 		static final String SERVICE_CLASS_NAME = "com.intellij.openapi.updateSettings.impl.PluginUpdateSourceService";
 		private static final Logger LOG = Logger.getInstance(Reflective.class);
 		private static final PluginUpdateSourceClient UNSUPPORTED_CLIENT = new PluginUpdateSourceClient() {
+			/**
+			 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+			 * @see PluginUpdateSourceClient#getCurrentSourceHost(PluginId)
+			 */
 			@Override
 			public @Nullable String getCurrentSourceHost(@NotNull PluginId pluginId) {
 				return null;
 			}
+			/**
+			 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+			 * @see PluginUpdateSourceClient#isSupported()
+			 */
 			@Override
 			public boolean isSupported() {
 				return false;
 			}
+			/**
+			 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+			 * @see PluginUpdateSourceClient#matchesCustomRepository(PluginId, String)
+			 */
 			@Override
 			public boolean matchesCustomRepository(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {
 				return false;
 			}
+			/**
+			 * - @used-by {@link PluginUpdateSourceClient.Reflective}
+			 * @see PluginUpdateSourceClient#setCustomRepositorySource(PluginId, String)
+			 */
 			@Override
 			public void setCustomRepositorySource(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {}
 		};
@@ -45,6 +90,9 @@ interface PluginUpdateSourceClient {
 		private final Method setPluginUpdateSourceId;
 		private final Method getPresentableName;
 		private final Method canInstallUpdatesFrom;
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient.Reflective#tryBind(ClassLoader, String, Function)}
+		 */
 		private Reflective(
 			@NotNull Object service,
 			@NotNull Method getPluginUpdateSourceId,
@@ -60,6 +108,10 @@ interface PluginUpdateSourceClient {
 			this.getPresentableName = getPresentableName;
 			this.canInstallUpdatesFrom = canInstallUpdatesFrom;
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#getCurrentSourceHost(PluginId)}
+		 * @see PluginUpdateSourceClient#getCurrentSourceHost(PluginId)
+		 */
 		@Override
 		public @Nullable String getCurrentSourceHost(@NotNull PluginId pluginId) {
 			String r = null;
@@ -70,10 +122,18 @@ interface PluginUpdateSourceClient {
 			}
 			return r;
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#isSupported()}
+		 * @see PluginUpdateSourceClient#isSupported()
+		 */
 		@Override
 		public boolean isSupported() {
 			return true;
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#matchesCustomRepository(PluginId, String)}
+		 * @see PluginUpdateSourceClient#matchesCustomRepository(PluginId, String)
+		 */
 		@Override
 		public boolean matchesCustomRepository(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {
 			boolean r = false;
@@ -86,6 +146,10 @@ interface PluginUpdateSourceClient {
 			}
 			return r;
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#setCustomRepositorySource(PluginId, String)}
+		 * @see PluginUpdateSourceClient#setCustomRepositorySource(PluginId, String)
+		 */
 		@Override
 		public void setCustomRepositorySource(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {
 			Object customSource = invoke(createCustomRepositorySource, service, repositoryUrl);
@@ -93,6 +157,9 @@ interface PluginUpdateSourceClient {
 				invoke(setPluginUpdateSourceId, service, pluginId, customSource);
 			}
 		}
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrar#appFrameCreated(List)}
+		 */
 		static @Nullable PluginUpdateSourceClient tryBind(@NotNull Application application) {
 			return tryBind(
 				Reflective.class.getClassLoader(),
@@ -100,6 +167,13 @@ interface PluginUpdateSourceClient {
 				application::getService
 			);
 		}
+		/**
+		 * - @used-by {@link IdeUpdateSourceIntegrationTest#verifyPlatformUpdateSourceContract(String)}
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testMultiInstanceIsolation(Path)}
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReflectiveBridgeAcross2026_3And2026_2_5(Path)}
+		 * - @used-by {@link PluginUpdateSourceClient.Reflective#tryBind(Application)}
+		 * - @uses com.intellij.openapi.updateSettings.impl.PluginUpdateSourceService
+		 */
 		static @Nullable PluginUpdateSourceClient tryBind(
 			@NotNull ClassLoader classLoader,
 			@NotNull String serviceClassName,
@@ -152,6 +226,11 @@ interface PluginUpdateSourceClient {
 			}
 			return r;
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient.Reflective#getCurrentSourceHost(PluginId)}
+		 * - @used-by {@link PluginUpdateSourceClient.Reflective#matchesCustomRepository(PluginId, String)}
+		 * - @used-by {@link PluginUpdateSourceClient.Reflective#setCustomRepositorySource(PluginId, String)}
+		 */
 		private static @Nullable Object invoke(@NotNull Method method, @Nullable Object target, Object... args) {
 			try {
 				return method.invoke(target, args);
@@ -171,6 +250,10 @@ interface PluginUpdateSourceClient {
 				throw new IllegalStateException("Cannot invoke " + method.getName(), e);
 			}
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient.Reflective#invoke(Method, Object, Object...)}
+		 * - @used-by {@link PluginUpdateSourceClient.Reflective#tryBind(ClassLoader, String, Function)}
+		 */
 		private static void rethrowIfCancellation(@Nullable Throwable cause) {
 			if (cause instanceof CancellationException cancellation) {
 				throw cancellation;

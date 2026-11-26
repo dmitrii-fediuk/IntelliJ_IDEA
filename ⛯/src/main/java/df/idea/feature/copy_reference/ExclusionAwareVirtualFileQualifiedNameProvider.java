@@ -19,8 +19,16 @@ import org.jetbrains.annotations.Nullable;
 public final class ExclusionAwareVirtualFileQualifiedNameProvider implements VirtualFileQualifiedNameProvider {
 	@FunctionalInterface
 	interface ExcludeRootsResolver {
+		/**
+		 * - @used-by {@link ExclusionAwareVirtualFileQualifiedNameProvider#isExcludedInModule(Module, VirtualFile, ExcludeRootsResolver)}
+		 */
 		@NotNull VirtualFile[] getExcludeRoots(@NotNull Module module);
 	}
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link VirtualFileQualifiedNameProvider#getQualifiedName(Project, VirtualFile)}
+	 * @see VirtualFileQualifiedNameProvider#getQualifiedName(Project, VirtualFile)
+	 */
 	@Override
 	public @Nullable String getQualifiedName(@NotNull Project project, @NotNull VirtualFile virtualFile) {
 		return resolveQualifiedName(
@@ -29,6 +37,10 @@ public final class ExclusionAwareVirtualFileQualifiedNameProvider implements Vir
 			module -> ModuleRootManager.getInstance(module).getExcludeRoots()
 		);
 	}
+	/**
+	 * - @used-by {@link ExclusionAwareVirtualFileQualifiedNameProvider#getQualifiedName(Project, VirtualFile)}
+	 * - @used-by {@link ExclusionAwareVirtualFileQualifiedNameProviderTest.Model#resolve(VirtualFile)}
+	 */
 	static @Nullable String resolveQualifiedName(
 		@NotNull ProjectFileIndex index,
 		@NotNull VirtualFile virtualFile,
@@ -74,6 +86,9 @@ public final class ExclusionAwareVirtualFileQualifiedNameProvider implements Vir
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link ExclusionAwareVirtualFileQualifiedNameProvider#resolveQualifiedName(ProjectFileIndex, VirtualFile, ExcludeRootsResolver)}
+	 */
 	private static boolean isExcludedInModule(
 		@NotNull Module module,
 		@NotNull VirtualFile candidate,

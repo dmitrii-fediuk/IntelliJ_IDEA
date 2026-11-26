@@ -39,6 +39,9 @@ public final class IdeMarkdownCodeFenceIntegrationTest {
 	);
 	private static final CustomHighlighterRenderer FENCE_RENDERER = (editor, highlighter, graphics) -> {};
 	private static final CustomHighlighterRenderer OTHER_RENDERER = (editor, highlighter, graphics) -> {};
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		verifyRealMarkupModelInterception();
 		verifyNoMarkdownPluginCouplingInProductionBytecode();
@@ -46,6 +49,9 @@ public final class IdeMarkdownCodeFenceIntegrationTest {
 			"IDE_MARKDOWN_CODE_FENCE_INTEGRATION_PASSED=" + A.passedCount() + " assertions"
 		);
 	}
+	/**
+	 * - @used-by {@link IdeMarkdownCodeFenceIntegrationTest#verifyRealMarkupModelInterception()}
+	 */
 	private static @NotNull Application fakeApplication() {
 		EditorColorsScheme scheme = (EditorColorsScheme) Proxy.newProxyInstance(
 			EditorColorsScheme.class.getClassLoader(),
@@ -75,6 +81,9 @@ public final class IdeMarkdownCodeFenceIntegrationTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link IdeMarkdownCodeFenceIntegrationTest#main(String[])}
+	 */
 	private static void verifyNoMarkdownPluginCouplingInProductionBytecode() throws Exception {
 		// 2026-11-22
 		// "Standardize df.idea feature package names with snake_case word separators":
@@ -104,6 +113,9 @@ public final class IdeMarkdownCodeFenceIntegrationTest {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link IdeMarkdownCodeFenceIntegrationTest#main(String[])}
+	 */
 	private static void verifyRealMarkupModelInterception() {
 		Disposable appDisposable = Disposer.newDisposable("df.idea.test.app");
 		ApplicationManager.setApplication(fakeApplication(), appDisposable);
@@ -211,48 +223,98 @@ public final class IdeMarkdownCodeFenceIntegrationTest {
 	}
 	private static final class StubEditorColorsManager extends EditorColorsManager {
 		private final EditorColorsScheme scheme;
+		/**
+		 * - @used-by {@link IdeMarkdownCodeFenceIntegrationTest#fakeApplication()}
+		 */
 		StubEditorColorsManager(@NotNull EditorColorsScheme scheme) {
 			this.scheme = scheme;
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#addColorScheme(EditorColorsScheme)}
+		 * @see EditorColorsManager#addColorScheme(EditorColorsScheme)
+		 */
 		@Override
 		public void addColorScheme(@NotNull EditorColorsScheme scheme) {}
+		/**
+		 * - @used-by {@link EditorColorsManager#getActiveVisibleScheme()}
+		 * @see EditorColorsManager#getActiveVisibleScheme()
+		 */
 		@Override
 		public @NotNull EditorColorsScheme getActiveVisibleScheme() {
 			return scheme;
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#getAllSchemes()}
+		 * @see EditorColorsManager#getAllSchemes()
+		 */
 		@Override
 		public EditorColorsScheme @NotNull [] getAllSchemes() {
 			return new EditorColorsScheme[]{scheme};
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#getGlobalScheme()}
+		 * @see EditorColorsManager#getGlobalScheme()
+		 */
 		@Override
 		public @NotNull EditorColorsScheme getGlobalScheme() {
 			return scheme;
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#getScheme(String)}
+		 * @see EditorColorsManager#getScheme(String)
+		 */
 		@Override
 		public EditorColorsScheme getScheme(@NotNull String schemeName) {
 			return scheme;
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#getSchemeModificationCounter()}
+		 * @see EditorColorsManager#getSchemeModificationCounter()
+		 */
 		@Override
 		public long getSchemeModificationCounter() {
 			return 0L;
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#isDefaultScheme(EditorColorsScheme)}
+		 * @see EditorColorsManager#isDefaultScheme(EditorColorsScheme)
+		 */
 		@Override
 		public boolean isDefaultScheme(EditorColorsScheme scheme) {
 			return true;
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#isUseOnlyMonospacedFonts()}
+		 * @see EditorColorsManager#isUseOnlyMonospacedFonts()
+		 */
 		@Override
 		public boolean isUseOnlyMonospacedFonts() {
 			return false;
 		}
+		/**
+		 * - @used-by {@link EditorColorsManager#setCurrentSchemeOnLafChange(EditorColorsScheme)}
+		 * @see EditorColorsManager#setCurrentSchemeOnLafChange(EditorColorsScheme)
+		 */
 		@Override
 		public void setCurrentSchemeOnLafChange(@NotNull EditorColorsScheme scheme) {}
+		/**
+		 * - @used-by {@link EditorColorsManager#setGlobalScheme(EditorColorsScheme)}
+		 * @see EditorColorsManager#setGlobalScheme(EditorColorsScheme)
+		 */
 		@Override
 		public void setGlobalScheme(EditorColorsScheme scheme) {}
+		/**
+		 * - @used-by {@link EditorColorsManager#setUseOnlyMonospacedFonts(boolean)}
+		 * @see EditorColorsManager#setUseOnlyMonospacedFonts(boolean)
+		 */
 		@Override
 		public void setUseOnlyMonospacedFonts(boolean b) {}
 	}
 	private static final class TestMarkupModel extends MarkupModelImpl {
 		private static final long serialVersionUID = 1L;
+		/**
+		 * - @used-by {@link IdeMarkdownCodeFenceIntegrationTest#verifyRealMarkupModelInterception()}
+		 */
 		TestMarkupModel(@NotNull DocumentEx document) {
 			super(document);
 		}

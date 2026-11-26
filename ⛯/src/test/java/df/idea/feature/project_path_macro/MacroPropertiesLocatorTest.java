@@ -11,6 +11,9 @@ import java.util.List;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class MacroPropertiesLocatorTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) {
 		testSingleProjectMiscXml();
 		testMultiProjectMiscXml();
@@ -19,11 +22,17 @@ public final class MacroPropertiesLocatorTest {
 		testBlankAndInvalidPathsReturnEmpty();
 		System.out.println("MACRO_LOCATOR_TESTS_PASSED=" + A.passedCount());
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesLocatorTest#main(String[])}
+	 */
 	private static void testBlankAndInvalidPathsReturnEmpty() {
 		A.assertEquals("null path returns empty", List.of(), MacroPropertiesLocator.findCandidateFiles(null));
 		A.assertEquals("blank path returns empty", List.of(), MacroPropertiesLocator.findCandidateFiles("   "));
 		A.assertEquals("invalid NUL char returns empty", List.of(), MacroPropertiesLocator.findCandidateFiles("C:/bad\0path/misc.xml"));
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesLocatorTest#main(String[])}
+	 */
 	private static void testFileBasedIprProject() {
 		List<Path> candidates = MacroPropertiesLocator.findCandidateFiles("C:/work/legacy/demo.ipr");
 		A.assertEquals(
@@ -32,6 +41,9 @@ public final class MacroPropertiesLocatorTest {
 			candidates
 		);
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesLocatorTest#main(String[])}
+	 */
 	private static void testMultiProjectMiscXml() {
 		List<Path> candidates = MacroPropertiesLocator.findCandidateFiles(
 			"C:/work/clients/example.com/.idea/example.com--1/.idea/misc.xml"
@@ -45,6 +57,9 @@ public final class MacroPropertiesLocatorTest {
 			candidates
 		);
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesLocatorTest#main(String[])}
+	 */
 	private static void testSingleProjectMiscXml() {
 		List<Path> candidates = MacroPropertiesLocator.findCandidateFiles("C:/work/app/.idea/misc.xml");
 		A.assertEquals(
@@ -53,6 +68,9 @@ public final class MacroPropertiesLocatorTest {
 			candidates
 		);
 	}
+	/**
+	 * - @used-by {@link MacroPropertiesLocatorTest#main(String[])}
+	 */
 	private static void testTwoLevelNestedMultiProjectMiscXml() {
 		List<Path> candidates = MacroPropertiesLocator.findCandidateFiles(
 			"C:/work/clients/example.org/s/192.0.2.1/.idea/1/sub/.idea/misc.xml"

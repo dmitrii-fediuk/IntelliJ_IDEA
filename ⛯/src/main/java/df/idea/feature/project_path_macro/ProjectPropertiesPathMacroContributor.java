@@ -12,6 +12,12 @@ import org.jetbrains.annotations.NotNull;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class ProjectPropertiesPathMacroContributor implements ProjectWidePathMacroContributor {
 	private static final Logger LOG = Logger.getInstance(ProjectPropertiesPathMacroContributor.class);
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link IdePathMacroIntegrationTest#testNestedImlAndProjectXmlRoundTrip()}
+	 * - @used-by {@link ProjectWidePathMacroContributor#getProjectPathMacros(String)}
+	 * @see ProjectWidePathMacroContributor#getProjectPathMacros(String)
+	 */
 	@Override
 	public @NotNull Map<String, String> getProjectPathMacros(@NotNull String projectFilePath) {
 		Map<String, String> r = Map.of();

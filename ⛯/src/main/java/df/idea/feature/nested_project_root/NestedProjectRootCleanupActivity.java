@@ -22,6 +22,11 @@ import org.jetbrains.annotations.Nullable;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 public final class NestedProjectRootCleanupActivity implements ProjectActivity {
 	private static final Logger LOG = Logger.getInstance(NestedProjectRootCleanupActivity.class);
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link ProjectActivity#execute(Project, Continuation)}
+	 * @see ProjectActivity#execute(Project, Continuation)
+	 */
 	@Override
 	public @Nullable Object execute(
 		@NotNull Project project,
@@ -42,6 +47,13 @@ public final class NestedProjectRootCleanupActivity implements ProjectActivity {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyReactiveEventLogCycle(ProjectRootEntityAdapter)}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testDisposedAndNullGuards()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testPlainFlowFallback()}
+	 * - @used-by {@link NestedProjectRootCleanerTest#testResilienceAndCancellation()}
+	 * - @used-by {@link NestedProjectRootCleanupActivity#execute(Project, Continuation)}
+	 */
 	static @Nullable Object observeAndClean(
 		@NotNull Project project,
 		@Nullable WorkspaceModel workspaceModel,
@@ -82,6 +94,9 @@ public final class NestedProjectRootCleanupActivity implements ProjectActivity {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanupActivity#observeAndClean(Project, WorkspaceModel, ProjectRootEntityAdapter, boolean, Continuation)}
+	 */
 	private static @Nullable Object handleEvent(
 		@NotNull Project project,
 		@NotNull WorkspaceModel workspaceModel,
@@ -108,6 +123,10 @@ public final class NestedProjectRootCleanupActivity implements ProjectActivity {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanupActivity#handleEvent(Project, WorkspaceModel, ProjectRootEntityAdapter, boolean, VersionedStorageChange, Continuation)}
+	 * - @used-by {@link NestedProjectRootCleanupActivity#observeAndClean(Project, WorkspaceModel, ProjectRootEntityAdapter, boolean, Continuation)}
+	 */
 	private static @Nullable Object safeReconcile(
 		@NotNull Project project,
 		@NotNull WorkspaceModel workspaceModel,

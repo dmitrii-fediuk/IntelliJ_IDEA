@@ -28,7 +28,13 @@ import org.jetbrains.annotations.Nullable;
 final class NestedProjectRootCleaner {
 	static final String UPDATE_DESCRIPTION = "Remove nested ProjectRootEntity covered by module content roots";
 	private static final Logger LOG = Logger.getInstance(NestedProjectRootCleaner.class);
+	/**
+	 * - @used-by non-instantiable utility class
+	 */
 	private NestedProjectRootCleaner() {}
+	/**
+	 * - @used-by {@link NestedProjectRootCleaner#findRedundantProjectRoots(EntityStorage, ProjectRootEntityAdapter, boolean)}
+	 */
 	static @NotNull Set<String> collectContentRootUrls(@NotNull EntityStorage storage) {
 		Set<String> r = new LinkedHashSet<>();
 		Iterator<ContentRootEntity> iterator = storage.entities(ContentRootEntity.class).iterator();
@@ -44,6 +50,10 @@ final class NestedProjectRootCleaner {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleaner#reconcile(WorkspaceModel, ProjectRootEntityAdapter, boolean, Continuation)}
+	 * - @used-by {@link NestedProjectRootCleaner#removeRedundantProjectRoots(MutableEntityStorage, ProjectRootEntityAdapter, boolean)}
+	 */
 	static @NotNull List<WorkspaceEntity> findRedundantProjectRoots(
 		@NotNull EntityStorage storage,
 		@NotNull ProjectRootEntityAdapter adapter,
@@ -63,6 +73,10 @@ final class NestedProjectRootCleaner {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanerTest#testEventRelevance()}
+	 * - @used-by {@link NestedProjectRootCleanupActivity#handleEvent(Project, WorkspaceModel, ProjectRootEntityAdapter, boolean, VersionedStorageChange, Continuation)}
+	 */
 	static boolean hasRelevantChanges(
 		@NotNull VersionedStorageChange change,
 		@NotNull ProjectRootEntityAdapter adapter
@@ -70,6 +84,9 @@ final class NestedProjectRootCleaner {
 		return hasAddedOrReplaced(change.getChanges(adapter.entityClass()))
 			|| hasAddedOrReplaced(change.getChanges(ContentRootEntity.class));
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleanupActivity#safeReconcile(Project, WorkspaceModel, ProjectRootEntityAdapter, boolean, Continuation)}
+	 */
 	static @Nullable Object reconcile(
 		@NotNull WorkspaceModel workspaceModel,
 		@NotNull ProjectRootEntityAdapter adapter,
@@ -103,6 +120,11 @@ final class NestedProjectRootCleaner {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyModulelessProjectUntouched(ProjectRootEntityAdapter)}
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyMultiProjectStorageCleanup(ProjectRootEntityAdapter)}
+	 * - @used-by {@link NestedProjectRootCleaner#reconcile(WorkspaceModel, ProjectRootEntityAdapter, boolean, Continuation)}
+	 */
 	static int removeRedundantProjectRoots(
 		@NotNull MutableEntityStorage storage,
 		@NotNull ProjectRootEntityAdapter adapter,
@@ -117,6 +139,9 @@ final class NestedProjectRootCleaner {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootCleaner#hasRelevantChanges(VersionedStorageChange, ProjectRootEntityAdapter)}
+	 */
 	private static boolean hasAddedOrReplaced(@NotNull List<? extends EntityChange<?>> changes) {
 		boolean r = false;
 		for (EntityChange<?> entityChange : changes) {

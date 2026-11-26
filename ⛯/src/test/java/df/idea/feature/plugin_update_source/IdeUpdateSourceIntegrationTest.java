@@ -33,6 +33,9 @@ import org.jdom.Element;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class IdeUpdateSourceIntegrationTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		if (1 > args.length) {
 			throw new IllegalArgumentException("Usage: IdeUpdateSourceIntegrationTest <path-to-staged-df-idea.jar>");
@@ -90,6 +93,9 @@ public final class IdeUpdateSourceIntegrationTest {
 		}
 		System.out.println("IDE_UPDATE_SOURCE_INTEGRATION_PASSED (" + A.passedCount() + " assertions)");
 	}
+	/**
+	 * - @used-by {@link IdeUpdateSourceIntegrationTest#main(String[])}
+	 */
 	private static void deleteRecursively(Path root) throws IOException {
 		if (Files.exists(root)) {
 			try (Stream<Path> walk = Files.walk(root)) {
@@ -99,6 +105,9 @@ public final class IdeUpdateSourceIntegrationTest {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link IdeUpdateSourceIntegrationTest#main(String[])}
+	 */
 	private static void verifyPlatformUpdateSourceContract(String repoUrl) throws Exception {
 		ClassLoader cl = IdeUpdateSourceIntegrationTest.class.getClassLoader();
 		Class<?> serviceClass = Class.forName(PluginUpdateSourceClient.Reflective.SERVICE_CLASS_NAME, false, cl);

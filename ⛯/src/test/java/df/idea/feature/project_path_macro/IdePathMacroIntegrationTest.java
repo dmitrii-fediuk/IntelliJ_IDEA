@@ -22,12 +22,19 @@ import org.jdom.Element;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class IdePathMacroIntegrationTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		testDotMacroMatchesCollectorPattern();
 		testNestedImlAndProjectXmlRoundTrip();
 		testMultipleNestedVariablesChooseLongestMatchOnSave();
 		System.out.println("IDE_PATH_MACRO_INTEGRATION_TESTS_PASSED=" + A.passedCount());
 	}
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#testMultipleNestedVariablesChooseLongestMatchOnSave()}
+	 * - @used-by {@link IdePathMacroIntegrationTest#testNestedImlAndProjectXmlRoundTrip()}
+	 */
 	private static void deleteTree(Path root) throws IOException {
 		if (Files.exists(root)) {
 			try (var stream = Files.walk(root)) {
@@ -38,11 +45,17 @@ public final class IdePathMacroIntegrationTest {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#main(String[])}
+	 */
 	private static void testDotMacroMatchesCollectorPattern() {
 		Matcher m = PathMacrosCollector.MACRO_PATTERN.matcher("file://$df.m$/pub/media");
 		A.assertTrue("PathMacrosCollector.MACRO_PATTERN matches $df.m$", m.find());
 		A.assertEquals("extracted macro name is df.m", "df.m", m.group(1));
 	}
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#main(String[])}
+	 */
 	private static void testMultipleNestedVariablesChooseLongestMatchOnSave() throws IOException {
 		Path tmp = Files.createTempDirectory("df-idea-multi-");
 		try {
@@ -85,6 +98,9 @@ public final class IdePathMacroIntegrationTest {
 			deleteTree(tmp);
 		}
 	}
+	/**
+	 * - @used-by {@link IdePathMacroIntegrationTest#main(String[])}
+	 */
 	private static void testNestedImlAndProjectXmlRoundTrip() throws Exception {
 		Path tmp = Files.createTempDirectory("df-idea-int-");
 		try {

@@ -11,6 +11,9 @@ import java.util.List;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 public final class NestedProjectRootMatcherTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) {
 		testCaseSensitivity();
 		testCoveredSet();
@@ -18,6 +21,9 @@ public final class NestedProjectRootMatcherTest {
 		testStrictDescendant();
 		System.out.println("NESTED_PROJECT_ROOT_MATCHER_TESTS_PASSED (" + A.passedCount() + " assertions)");
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootMatcherTest#main(String[])}
+	 */
 	private static void testCaseSensitivity() {
 		A.assertEquals(
 			"case-insensitive Windows match allows different casing",
@@ -65,6 +71,9 @@ public final class NestedProjectRootMatcherTest {
 			)
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootMatcherTest#main(String[])}
+	 */
 	private static void testCoveredSet() {
 		A.assertEquals(
 			"empty content root set covers nothing",
@@ -121,6 +130,9 @@ public final class NestedProjectRootMatcherTest {
 			NestedProjectRootMatcher.isStrictlyCovered(null, roots, false)
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootMatcherTest#main(String[])}
+	 */
 	private static void testNormalization() {
 		A.assertEquals("null URL normalizes to null", null, NestedProjectRootMatcher.normalizeUrl(null));
 		A.assertEquals("blank URL normalizes to null", null, NestedProjectRootMatcher.normalizeUrl("   "));
@@ -158,6 +170,9 @@ public final class NestedProjectRootMatcherTest {
 			NestedProjectRootMatcher.normalizeUrl("FILE://C:\\work\\repo\\.idea\\p1\\")
 		);
 	}
+	/**
+	 * - @used-by {@link NestedProjectRootMatcherTest#main(String[])}
+	 */
 	private static void testStrictDescendant() {
 		A.assertEquals(
 			"direct child under content root is strict descendant",

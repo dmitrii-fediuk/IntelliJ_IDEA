@@ -19,7 +19,18 @@ import org.jetbrains.annotations.Nullable;
 public final class MacroPropertiesLocator {
 	public static final String PROPERTIES_FILE_NAME = ".properties";
 	private static final String IDEA_DIR_NAME = ".idea";
+	/**
+	 * - @used-by non-instantiable utility class
+	 */
 	private MacroPropertiesLocator() {}
+	/**
+	 * - @used-by {@link MacroPathResolver#resolveForProject(String)}
+	 * - @used-by {@link MacroPropertiesLocatorTest#testBlankAndInvalidPathsReturnEmpty()}
+	 * - @used-by {@link MacroPropertiesLocatorTest#testFileBasedIprProject()}
+	 * - @used-by {@link MacroPropertiesLocatorTest#testMultiProjectMiscXml()}
+	 * - @used-by {@link MacroPropertiesLocatorTest#testSingleProjectMiscXml()}
+	 * - @used-by {@link MacroPropertiesLocatorTest#testTwoLevelNestedMultiProjectMiscXml()}
+	 */
 	public static @NotNull List<Path> findCandidateFiles(@Nullable String projectFilePath) {
 		List<Path> r = List.of();
 		if (null != projectFilePath && !projectFilePath.isBlank()) {

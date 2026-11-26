@@ -55,11 +55,18 @@ import org.jetbrains.annotations.Nullable;
 public final class IdeProjectRootIntegrationTest {
 	private static final Assertions A = new Assertions();
 	private static final EntitySource TEST_SOURCE = new EntitySource() {
+		/**
+		 * - @used-by {@link IdeProjectRootIntegrationTest}
+		 * @see EntitySource#getVirtualFileUrl()
+		 */
 		@Override
 		public @Nullable VirtualFileUrl getVirtualFileUrl() {
 			return null;
 		}
 	};
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		ProjectRootEntityAdapter adapter = ProjectRootEntityAdapter.Reflective.tryBind();
 		A.assertTrue("ProjectRootEntityAdapter binds in active IDE runtime", null != adapter);
@@ -71,6 +78,10 @@ public final class IdeProjectRootIntegrationTest {
 		verifyReactiveEventLogCycle(adapter);
 		System.out.println("IDE_PROJECT_ROOT_INTEGRATION_PASSED (" + A.passedCount() + " assertions)");
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyMultiProjectStorageCleanup(ProjectRootEntityAdapter)}
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyReactiveEventLogCycle(ProjectRootEntityAdapter)}
+	 */
 	private static ContentRootEntity addModuleWithContent(
 		MutableEntityStorage storage,
 		VirtualFileUrlManager urlManager,
@@ -111,6 +122,11 @@ public final class IdeProjectRootIntegrationTest {
 		ModuleEntity added = storage.addEntity(module);
 		return added.getContentRoots().get(0);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyModulelessProjectUntouched(ProjectRootEntityAdapter)}
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyMultiProjectStorageCleanup(ProjectRootEntityAdapter)}
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyReactiveEventLogCycle(ProjectRootEntityAdapter)}
+	 */
 	private static ProjectRootEntity addProjectRoot(
 		MutableEntityStorage storage,
 		VirtualFileUrlManager urlManager,
@@ -123,6 +139,10 @@ public final class IdeProjectRootIntegrationTest {
 			)
 		);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#addModuleWithContent(MutableEntityStorage, VirtualFileUrlManager, String, String, String)}
+	 * - @used-by {@link IdeProjectRootIntegrationTest#addProjectRoot(MutableEntityStorage, VirtualFileUrlManager, String)}
+	 */
 	private static VirtualFileUrl createUrl(VirtualFileUrlManager urlManager, String url) throws Exception {
 		Method factory;
 		try {
@@ -133,6 +153,9 @@ public final class IdeProjectRootIntegrationTest {
 		}
 		return (VirtualFileUrl) factory.invoke(urlManager, url);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyReactiveEventLogCycle(ProjectRootEntityAdapter)}
+	 */
 	private static Project fakeProject() {
 		return (Project) Proxy.newProxyInstance(
 			IdeProjectRootIntegrationTest.class.getClassLoader(),
@@ -149,6 +172,9 @@ public final class IdeProjectRootIntegrationTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyReactiveEventLogCycle(ProjectRootEntityAdapter)}
+	 */
 	private static VersionedStorageChange fakeStorageChange(
 		ImmutableEntityStorage before,
 		ImmutableEntityStorage after,
@@ -176,6 +202,9 @@ public final class IdeProjectRootIntegrationTest {
 			}
 		);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyMultiProjectStorageCleanup(ProjectRootEntityAdapter)}
+	 */
 	private static List<String> sortedContentRootUrls(ImmutableEntityStorage storage) {
 		List<String> r = new ArrayList<>();
 		var it = storage.entities(ContentRootEntity.class).iterator();
@@ -185,6 +214,11 @@ public final class IdeProjectRootIntegrationTest {
 		Collections.sort(r);
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyModulelessProjectUntouched(ProjectRootEntityAdapter)}
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyMultiProjectStorageCleanup(ProjectRootEntityAdapter)}
+	 * - @used-by {@link IdeProjectRootIntegrationTest#verifyReactiveEventLogCycle(ProjectRootEntityAdapter)}
+	 */
 	private static List<String> sortedProjectRootUrls(ImmutableEntityStorage storage, ProjectRootEntityAdapter adapter) {
 		List<String> r = new ArrayList<>();
 		var it = storage.entities(adapter.entityClass()).iterator();
@@ -194,6 +228,9 @@ public final class IdeProjectRootIntegrationTest {
 		Collections.sort(r);
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#main(String[])}
+	 */
 	private static void verifyModulelessProjectUntouched(ProjectRootEntityAdapter adapter) throws Exception {
 		VirtualFileUrlManager urlManager = new VirtualFileUrlManagerImpl();
 		MutableEntityStorage storage = MutableEntityStorage.create();
@@ -206,6 +243,9 @@ public final class IdeProjectRootIntegrationTest {
 			sortedProjectRootUrls(storage.toSnapshot(), adapter)
 		);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#main(String[])}
+	 */
 	private static void verifyMultiProjectStorageCleanup(ProjectRootEntityAdapter adapter) throws Exception {
 		VirtualFileUrlManager urlManager = new VirtualFileUrlManagerImpl();
 		MutableEntityStorage storage = MutableEntityStorage.create();
@@ -239,6 +279,9 @@ public final class IdeProjectRootIntegrationTest {
 		int secondPass = NestedProjectRootCleaner.removeRedundantProjectRoots(storage, adapter, false);
 		A.assertEquals("second cleanup pass is idempotent (0 removed)", 0, secondPass);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#main(String[])}
+	 */
 	private static void verifyNoHardInternalReferenceInProductionBytecode() throws Exception {
 		ClassLoader cl = NestedProjectRootCleanupActivity.class.getClassLoader();
 		// 2026-11-22
@@ -263,6 +306,9 @@ public final class IdeProjectRootIntegrationTest {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#main(String[])}
+	 */
 	private static void verifyPlatformContributorContract() throws Exception {
 		ClassLoader cl = IdeProjectRootIntegrationTest.class.getClassLoader();
 		Class<?> contributorClass = Class.forName(
@@ -287,6 +333,9 @@ public final class IdeProjectRootIntegrationTest {
 			com.intellij.openapi.startup.ProjectActivity.class.isAssignableFrom(synchronizerClass)
 		);
 	}
+	/**
+	 * - @used-by {@link IdeProjectRootIntegrationTest#main(String[])}
+	 */
 	private static void verifyReactiveEventLogCycle(ProjectRootEntityAdapter adapter) throws Exception {
 		VirtualFileUrlManager urlManager = new VirtualFileUrlManagerImpl();
 		MutableEntityStorage initial = MutableEntityStorage.create();

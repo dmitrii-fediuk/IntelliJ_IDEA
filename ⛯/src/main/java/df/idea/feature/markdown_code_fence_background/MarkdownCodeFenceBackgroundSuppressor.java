@@ -20,7 +20,15 @@ import org.jetbrains.annotations.Nullable;
 final class MarkdownCodeFenceBackgroundSuppressor {
 	static final String TARGET_KEY_NAME = "MARKDOWN_CODE_FENCE_BACKGROUND";
 	private static final Logger LOG = Logger.getInstance(MarkdownCodeFenceBackgroundSuppressor.class);
+	/**
+	 * - @used-by non-instantiable utility class
+	 */
 	private MarkdownCodeFenceBackgroundSuppressor() {}
+	/**
+	 * - @used-by {@link IdeMarkdownCodeFenceIntegrationTest#verifyRealMarkupModelInterception()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundEditorListener#attachEditor(Editor)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testAttachAndListenerEvents()}
+	 */
 	static @Nullable Disposable attach(@Nullable MarkupModel markupModel) {
 		Disposable r = null;
 		if (markupModel instanceof MarkupModelEx markupModelEx) {
@@ -40,12 +48,25 @@ final class MarkdownCodeFenceBackgroundSuppressor {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressor#attach(MarkupModel)}
+	 */
 	static @NotNull MarkupModelListener createListener() {
 		return new MarkupModelListener() {
+			/**
+			 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressor#createListener()}
+			 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testAttachAndListenerEvents()}
+			 * @see MarkupModelListener#afterAdded(RangeHighlighterEx)
+			 */
 			@Override
 			public void afterAdded(@NotNull RangeHighlighterEx highlighter) {
 				suppressIfTarget(highlighter);
 			}
+			/**
+			 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressor#createListener()}
+			 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testAttachAndListenerEvents()}
+			 * @see MarkupModelListener#attributesChanged(RangeHighlighterEx, boolean, boolean)
+			 */
 			@Override
 			public void attributesChanged(
 				@NotNull RangeHighlighterEx highlighter,
@@ -58,6 +79,10 @@ final class MarkdownCodeFenceBackgroundSuppressor {
 			}
 		};
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressor#suppressIfTarget(RangeHighlighter)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testTargetMatching()}
+	 */
 	static boolean isTargetHighlighter(@Nullable RangeHighlighter highlighter) {
 		boolean r = false;
 		if (null != highlighter && highlighter.isValid() && null != highlighter.getCustomRenderer()) {
@@ -66,6 +91,10 @@ final class MarkdownCodeFenceBackgroundSuppressor {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressor#attach(MarkupModel)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testSuppressExistingAndErrorResilience()}
+	 */
 	static int suppressExisting(@Nullable MarkupModel markupModel) {
 		int r = 0;
 		if (null != markupModel) {
@@ -82,6 +111,11 @@ final class MarkdownCodeFenceBackgroundSuppressor {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressor#createListener()}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressor#suppressExisting(MarkupModel)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testSuppressIfTargetAndIdempotency()}
+	 */
 	static boolean suppressIfTarget(@Nullable RangeHighlighter highlighter) {
 		boolean r = false;
 		if (isTargetHighlighter(highlighter)) {

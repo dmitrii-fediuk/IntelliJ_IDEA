@@ -23,7 +23,14 @@ import org.jetbrains.annotations.Nullable;
 public final class LocalPluginRepositoryLocator {
 	public static final String PLUGIN_ID = "df.idea";
 	public static final String REPOSITORY_FILE_NAME = "updatePlugins.xml";
+	/**
+	 * - @used-by non-instantiable utility class
+	 */
 	private LocalPluginRepositoryLocator() {}
+	/**
+	 * - @used-by {@link LocalPluginUpdateSettingsProvider#getPluginRepositories()}
+	 * - @used-by {@link LocalUpdateSourceRegistrar#appFrameCreated(List)}
+	 */
 	public static @Nullable String discoverLocalRepositoryUrl() {
 		Path artifact = locatePluginArtifact(
 			LocalPluginRepositoryLocator::findLoadedPluginPath,
@@ -32,6 +39,10 @@ public final class LocalPluginRepositoryLocator {
 		Path repositoryFile = resolveRepositoryFile(artifact);
 		return null != repositoryFile ? toRepositoryUrl(repositoryFile) : null;
 	}
+	/**
+	 * - @used-by {@link LocalPluginRepositoryLocator#discoverLocalRepositoryUrl()}
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#testLocatePluginArtifactFallback(Path)}
+	 */
 	public static @Nullable Path locatePluginArtifact(
 		@Nullable Supplier<Path> descriptorPathSupplier,
 		@Nullable Class<?> anchorClass
@@ -64,6 +75,14 @@ public final class LocalPluginRepositoryLocator {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdeUpdateSourceIntegrationTest#main(String[])}
+	 * - @used-by {@link LocalPluginRepositoryLocator#discoverLocalRepositoryUrl()}
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#testDirectoryLayout(Path)}
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#testMissingUpdateXmlReturnsNull(Path)}
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#testSiblingFileInNonBmpPath(Path)}
+	 * - @used-by {@link df.idea.plugin.PluginDescriptorVerificationTest#verifyViaIdeaProperties()}
+	 */
 	public static @Nullable Path resolveRepositoryFile(@Nullable Path pluginLocation) {
 		Path r = null;
 		if (null != pluginLocation) {
@@ -95,9 +114,21 @@ public final class LocalPluginRepositoryLocator {
 		}
 		return r;
 	}
+	/**
+	 * - @used-by {@link IdeUpdateSourceIntegrationTest#main(String[])}
+	 * - @used-by {@link LocalPluginRepositoryLocator#discoverLocalRepositoryUrl()}
+	 * - @used-by {@link LocalPluginRepositoryLocatorTest#testSiblingFileInNonBmpPath(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testMultiInstanceIsolation(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReflectiveBridgeAcross2026_3And2026_2_5(Path)}
+	 * - @used-by {@link df.idea.plugin.PluginDescriptorVerificationTest#verifyViaIdeaProperties()}
+	 */
 	public static @NotNull String toRepositoryUrl(@NotNull Path repositoryFile) {
 		return repositoryFile.toAbsolutePath().normalize().toUri().toString();
 	}
+	/**
+	 * - @used-by {@link LocalPluginRepositoryLocator#discoverLocalRepositoryUrl()}
+	 */
 	private static @Nullable Path findLoadedPluginPath() {
 		IdeaPluginDescriptor descriptor = PluginManagerCore.getPlugin(PluginId.getId(PLUGIN_ID));
 		return null != descriptor ? descriptor.getPluginPath() : null;

@@ -20,17 +20,36 @@ import org.jetbrains.annotations.Nullable;
 public final class MarkdownCodeFenceBackgroundEditorListener implements EditorFactoryListener {
 	private static final Logger LOG = Logger.getInstance(MarkdownCodeFenceBackgroundEditorListener.class);
 	private final Map<Editor, Disposable> subscriptions = Collections.synchronizedMap(new IdentityHashMap<>());
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link EditorFactoryListener#editorCreated(EditorFactoryEvent)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 * @see EditorFactoryListener#editorCreated(EditorFactoryEvent)
+	 */
 	@Override
 	public void editorCreated(@NotNull EditorFactoryEvent event) {
 		attachEditor(event.getEditor());
 	}
+	/**
+	 * - @used-by META-INF/plugin.xml
+	 * - @used-by {@link EditorFactoryListener#editorReleased(EditorFactoryEvent)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 * @see EditorFactoryListener#editorReleased(EditorFactoryEvent)
+	 */
 	@Override
 	public void editorReleased(@NotNull EditorFactoryEvent event) {
 		detachEditor(event.getEditor());
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 */
 	int activeSubscriptionCount() {
 		return subscriptions.size();
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundEditorListener#editorCreated(EditorFactoryEvent)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 */
 	void attachEditor(@Nullable Editor editor) {
 		if (null != editor && !editor.isDisposed()) {
 			try {
@@ -47,6 +66,10 @@ public final class MarkdownCodeFenceBackgroundEditorListener implements EditorFa
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link MarkdownCodeFenceBackgroundEditorListener#editorReleased(EditorFactoryEvent)}
+	 * - @used-by {@link MarkdownCodeFenceBackgroundSuppressorTest#testEditorListenerLifecycle()}
+	 */
 	void detachEditor(@Nullable Editor editor) {
 		if (null != editor) {
 			Disposable subscription = subscriptions.remove(editor);

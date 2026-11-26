@@ -20,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class LocalUpdateSourceRegistrarTest {
 	private static final Assertions A = new Assertions();
+	/**
+	 * - @used-by build.ps1
+	 */
 	public static void main(String[] args) throws Exception {
 		// 2026-11-22
 		// "Standardize df.idea feature package names with snake_case word separators":
@@ -35,6 +38,9 @@ public final class LocalUpdateSourceRegistrarTest {
 		}
 		System.out.println("REGISTRAR_UPDATE_SOURCE_TESTS_PASSED (" + A.passedCount() + " assertions)");
 	}
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#main(String[])}
+	 */
 	private static void deleteRecursively(Path root) throws IOException {
 		if (Files.exists(root)) {
 			try (Stream<Path> walk = Files.walk(root)) {
@@ -44,6 +50,10 @@ public final class LocalUpdateSourceRegistrarTest {
 			}
 		}
 	}
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#main(String[])}
+	 * - @uses {@link Simulated2026_3Service#isFunctionalitySupported()}
+	 */
 	private static void testMultiInstanceIsolation(Path tempRoot) throws Exception {
 		Path xml = tempRoot.resolve("multi").resolve("updatePlugins.xml");
 		Files.createDirectories(xml.getParent());
@@ -64,6 +74,9 @@ public final class LocalUpdateSourceRegistrarTest {
 		A.assertEquals("sibling instance write count remained 0", 0, siblingInstanceService.writeCount);
 		A.assertEquals("sibling instance existing entries untouched", 1, siblingInstanceService.persisted.size());
 	}
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#main(String[])}
+	 */
 	private static void testReconcileGuardsAndLifecycle(Path tempRoot) throws Exception {
 		Path existingXml = tempRoot.resolve("current").resolve("updatePlugins.xml");
 		Files.createDirectories(existingXml.getParent());
@@ -102,23 +115,45 @@ public final class LocalUpdateSourceRegistrarTest {
 		A.assertEquals("stale host replaced with current URL", currentUrl, client.sources.get("df.idea"));
 		A.assertEquals("self-heal incremented write count", 2, client.writeCount);
 		PluginUpdateSourceClient brokenClient = new PluginUpdateSourceClient() {
+			/**
+			 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+			 * @see PluginUpdateSourceClient#getCurrentSourceHost(PluginId)
+			 */
 			@Override
 			public @Nullable String getCurrentSourceHost(@NotNull PluginId pluginId) {
 				return null;
 			}
+			/**
+			 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+			 * @see PluginUpdateSourceClient#isSupported()
+			 */
 			@Override
 			public boolean isSupported() {
 				throw new NoSuchMethodError("simulated internal API break");
 			}
+			/**
+			 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+			 * @see PluginUpdateSourceClient#matchesCustomRepository(PluginId, String)
+			 */
 			@Override
 			public boolean matchesCustomRepository(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {
 				return false;
 			}
+			/**
+			 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+			 * @see PluginUpdateSourceClient#setCustomRepositorySource(PluginId, String)
+			 */
 			@Override
 			public void setCustomRepositorySource(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {}
 		};
 		A.assertEquals("LinkageError returns FAILED without throwing", LocalUpdateSourceRegistrar.Status.FAILED, LocalUpdateSourceRegistrar.reconcile(brokenClient, currentUrl));
 	}
+	/**
+	 * - @used-by {@link LocalUpdateSourceRegistrarTest#main(String[])}
+	 * - @uses {@link Simulated2026_2_5Service#getPluginUpdateSourceId(PluginId)}
+	 * - @uses {@link Simulated2026_2_5Service#isFunctionalitySupported()}
+	 * - @uses {@link Simulated2026_3Service#isFunctionalitySupported()}
+	 */
 	private static void testReflectiveBridgeAcross2026_3And2026_2_5(Path tempRoot) throws Exception {
 		Path xml = tempRoot.resolve("reflective").resolve("updatePlugins.xml");
 		Files.createDirectories(xml.getParent());
@@ -154,46 +189,91 @@ public final class LocalUpdateSourceRegistrarTest {
 		A.assertEquals("2026.3 write count remained 1", 1, impl.writeCount);
 	}
 	public interface Simulated2026_3Source {
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3SourceImpl#canInstallUpdatesFrom(Simulated2026_3Source)}
+		 */
 		boolean canInstallUpdatesFrom(@NotNull Simulated2026_3Source other);
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3SourceImpl#canInstallUpdatesFrom(Simulated2026_3Source)}
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3SourceImpl#getPresentableName()}
+		 */
 		@NotNull String getPresentableName();
 	}
 	public static final class Simulated2026_2_5Service {
 		static boolean supported = false;
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReflectiveBridgeAcross2026_3And2026_2_5(Path)}
+		 */
 		public @Nullable Object getPluginUpdateSourceId(@NotNull PluginId pluginId) {
 			return null;
 		}
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReflectiveBridgeAcross2026_3And2026_2_5(Path)}
+		 */
 		public static boolean isFunctionalitySupported() {
 			return supported;
 		}
 	}
 	public static abstract class Simulated2026_3Service {
 		static boolean supported = true;
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3ServiceImpl#createCustomRepositoryPluginUpdateSourceId(String)}
+		 */
 		public abstract @NotNull Simulated2026_3Source createCustomRepositoryPluginUpdateSourceId(@NotNull String host);
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3ServiceImpl#getPluginUpdateSourceId(PluginId)}
+		 */
 		public abstract @Nullable Simulated2026_3Source getPluginUpdateSourceId(@NotNull PluginId pluginId);
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testMultiInstanceIsolation(Path)}
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReflectiveBridgeAcross2026_3And2026_2_5(Path)}
+		 */
 		public static boolean isFunctionalitySupported() {
 			return supported;
 		}
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3ServiceImpl#setPluginUpdateSourceId(PluginId, Simulated2026_3Source)}
+		 */
 		public abstract void setPluginUpdateSourceId(@NotNull PluginId pluginId, @NotNull Simulated2026_3Source source);
 	}
-	private static final class FakeClient implements PluginUpdateSourceClient {
+	static final class FakeClient implements PluginUpdateSourceClient {
 		final boolean supported;
 		final Map<String, String> sources = new HashMap<>();
 		int writeCount = 0;
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testReconcileGuardsAndLifecycle(Path)}
+		 */
 		FakeClient(boolean supported) {
 			this.supported = supported;
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#getCurrentSourceHost(PluginId)}
+		 * @see PluginUpdateSourceClient#getCurrentSourceHost(PluginId)
+		 */
 		@Override
 		public @Nullable String getCurrentSourceHost(@NotNull PluginId pluginId) {
 			return sources.get(pluginId.getIdString());
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#isSupported()}
+		 * @see PluginUpdateSourceClient#isSupported()
+		 */
 		@Override
 		public boolean isSupported() {
 			return supported;
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#matchesCustomRepository(PluginId, String)}
+		 * @see PluginUpdateSourceClient#matchesCustomRepository(PluginId, String)
+		 */
 		@Override
 		public boolean matchesCustomRepository(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {
 			return repositoryUrl.equals(sources.get(pluginId.getIdString()));
 		}
+		/**
+		 * - @used-by {@link PluginUpdateSourceClient#setCustomRepositorySource(PluginId, String)}
+		 * @see PluginUpdateSourceClient#setCustomRepositorySource(PluginId, String)
+		 */
 		@Override
 		public void setCustomRepositorySource(@NotNull PluginId pluginId, @NotNull String repositoryUrl) {
 			sources.put(pluginId.getIdString(), repositoryUrl);
@@ -203,14 +283,26 @@ public final class LocalUpdateSourceRegistrarTest {
 	private static final class Simulated2026_3ServiceImpl extends Simulated2026_3Service {
 		final Map<String, Simulated2026_3Source> persisted = new HashMap<>();
 		int writeCount = 0;
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3Service#createCustomRepositoryPluginUpdateSourceId(String)}
+		 * @see LocalUpdateSourceRegistrarTest.Simulated2026_3Service#createCustomRepositoryPluginUpdateSourceId(String)
+		 */
 		@Override
 		public @NotNull Simulated2026_3Source createCustomRepositoryPluginUpdateSourceId(@NotNull String host) {
 			return new Simulated2026_3SourceImpl(host);
 		}
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3Service#getPluginUpdateSourceId(PluginId)}
+		 * @see LocalUpdateSourceRegistrarTest.Simulated2026_3Service#getPluginUpdateSourceId(PluginId)
+		 */
 		@Override
 		public @Nullable Simulated2026_3Source getPluginUpdateSourceId(@NotNull PluginId pluginId) {
 			return persisted.get(pluginId.getIdString());
 		}
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3Service#setPluginUpdateSourceId(PluginId, Simulated2026_3Source)}
+		 * @see LocalUpdateSourceRegistrarTest.Simulated2026_3Service#setPluginUpdateSourceId(PluginId, Simulated2026_3Source)
+		 */
 		@Override
 		public void setPluginUpdateSourceId(@NotNull PluginId pluginId, @NotNull Simulated2026_3Source source) {
 			persisted.put(pluginId.getIdString(), source);
@@ -219,13 +311,25 @@ public final class LocalUpdateSourceRegistrarTest {
 	}
 	private static final class Simulated2026_3SourceImpl implements Simulated2026_3Source {
 		private final String host;
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest#testMultiInstanceIsolation(Path)}
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3ServiceImpl#createCustomRepositoryPluginUpdateSourceId(String)}
+		 */
 		Simulated2026_3SourceImpl(String host) {
 			this.host = host;
 		}
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3Source#canInstallUpdatesFrom(Simulated2026_3Source)}
+		 * @see LocalUpdateSourceRegistrarTest.Simulated2026_3Source#canInstallUpdatesFrom(Simulated2026_3Source)
+		 */
 		@Override
 		public boolean canInstallUpdatesFrom(@NotNull Simulated2026_3Source other) {
 			return host.equals(other.getPresentableName());
 		}
+		/**
+		 * - @used-by {@link LocalUpdateSourceRegistrarTest.Simulated2026_3Source#getPresentableName()}
+		 * @see LocalUpdateSourceRegistrarTest.Simulated2026_3Source#getPresentableName()
+		 */
 		@Override
 		public @NotNull String getPresentableName() {
 			return host;
