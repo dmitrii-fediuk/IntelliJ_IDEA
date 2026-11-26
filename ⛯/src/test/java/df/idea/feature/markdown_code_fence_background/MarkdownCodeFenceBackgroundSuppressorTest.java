@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.markdown_code_fence_background;
@@ -33,6 +32,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 public final class MarkdownCodeFenceBackgroundSuppressorTest {
 	private static final Assertions A = new Assertions();
 	private static final TextAttributesKey TARGET_KEY = TextAttributesKey.createTextAttributesKey(

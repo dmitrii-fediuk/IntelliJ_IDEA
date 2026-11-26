@@ -1,19 +1,25 @@
+<!-- 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk -->
 <!--
-2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
+2026-11-22
 "Initialize standalone df.idea IntelliJ IDEA plugin repository":
 https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
-"Remove nested ProjectRootEntity instances covered by module content roots":
-https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
-"Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
-https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
-"Standardize df.idea feature package names with snake_case word separators":
-https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 -->
 <idea-plugin>
 	<id>df.idea</id>
 	<name>Dmitrii Fediuk</name>
 	<version>1.0.0</version>
 	<vendor url="https://github.com/dmitrii-fediuk">Dmitrii Fediuk</vendor>
+<!--
+2026-11-22
+"Remove nested ProjectRootEntity instances covered by module content roots":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+2026-11-22
+"Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+2026-11-22
+"Standardize df.idea feature package names with snake_case word separators":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
+-->
 	<description><![CDATA[
 		Personal IntelliJ IDEA plugin suite by Dmitrii Fediuk.
 		<ul>
@@ -40,9 +46,24 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 	]]></description>
 	<idea-version since-build="262"/>
 	<depends>com.intellij.modules.lang</depends>
+<!--
+2026-11-22
+"Standardize df.idea feature package names with snake_case word separators":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
+-->
 	<extensions defaultExtensionNs="com.intellij">
+<!--
+2026-11-22
+"Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+-->
 		<editorFactoryListener
 			implementation="df.idea.feature.markdown_code_fence_background.MarkdownCodeFenceBackgroundEditorListener"/>
+<!--
+2026-11-22
+"Remove nested ProjectRootEntity instances covered by module content roots":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+-->
 		<postStartupActivity
 			implementation="df.idea.feature.nested_project_root.NestedProjectRootCleanupActivity"/>
 		<projectPathMacroContributor
@@ -54,6 +75,11 @@ https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 			order="first"
 			implementation="df.idea.feature.copy_reference.ExclusionAwareVirtualFileQualifiedNameProvider"/>
 	</extensions>
+<!--
+2026-11-22
+"Standardize df.idea feature package names with snake_case word separators":
+https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
+-->
 	<applicationListeners>
 		<listener
 			class="df.idea.feature.plugin_update_source.LocalUpdateSourceRegistrar"

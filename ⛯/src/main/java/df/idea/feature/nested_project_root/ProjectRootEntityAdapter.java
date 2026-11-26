@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Remove nested ProjectRootEntity instances covered by module content roots":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.nested_project_root;
@@ -12,6 +11,9 @@ import java.lang.reflect.Method;
 import java.util.concurrent.CancellationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Remove nested ProjectRootEntity instances covered by module content roots":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 interface ProjectRootEntityAdapter {
 	@NotNull Class<? extends WorkspaceEntity> entityClass();
 	@Nullable String getRootUrl(@NotNull WorkspaceEntity entity);

@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.plugin_update_source;
@@ -13,6 +12,9 @@ import java.util.concurrent.CancellationException;
 import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 interface PluginUpdateSourceClient {
 	@Nullable String getCurrentSourceHost(@NotNull PluginId pluginId);
 	boolean isSupported();

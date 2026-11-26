@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.markdown_code_fence_background;
@@ -15,6 +14,9 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 public final class MarkdownCodeFenceBackgroundEditorListener implements EditorFactoryListener {
 	private static final Logger LOG = Logger.getInstance(MarkdownCodeFenceBackgroundEditorListener.class);
 	private final Map<Editor, Disposable> subscriptions = Collections.synchronizedMap(new IdentityHashMap<>());

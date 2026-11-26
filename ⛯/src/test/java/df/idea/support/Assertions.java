@@ -1,9 +1,10 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 package df.idea.support;
 import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class Assertions {
 	private int passed = 0;
 	public void assertEquals(String label, @Nullable Object expected, @Nullable Object actual) {

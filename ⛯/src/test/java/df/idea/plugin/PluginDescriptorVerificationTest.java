@@ -1,12 +1,4 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
-// "Remove nested ProjectRootEntity instances covered by module content roots":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
-// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
-// "Standardize df.idea feature package names with snake_case word separators":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.plugin;
 import com.intellij.ide.AppLifecycleListener;
 import com.intellij.ide.actions.VirtualFileQualifiedNameProvider;
@@ -24,15 +16,24 @@ import com.intellij.ide.plugins.newui.PluginNodeModelBuilderFactory;
 import com.intellij.ide.plugins.newui.PluginUiModel;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.impl.ProjectWidePathMacroContributor;
+// 2026-11-22
+// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 import com.intellij.openapi.editor.event.EditorFactoryListener;
 import com.intellij.openapi.extensions.ExtensionDescriptor;
 import com.intellij.openapi.extensions.LoadingOrder;
 import com.intellij.openapi.project.ProjectCloseListener;
+// 2026-11-22
+// "Remove nested ProjectRootEntity instances covered by module content roots":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.openapi.updateSettings.impl.UpdateSettingsProvider;
 import com.intellij.openapi.util.BuildNumber;
 import com.intellij.util.lang.ZipEntryResolverPool;
 import com.intellij.util.messages.ListenerDescriptor;
+// 2026-11-22
+// "Standardize df.idea feature package names with snake_case word separators":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 import df.idea.feature.plugin_update_source.LocalPluginRepositoryLocator;
 import df.idea.support.Assertions;
 import java.lang.reflect.Method;
@@ -47,13 +48,34 @@ import kotlin.coroutines.EmptyCoroutineContext;
 import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.Deferred;
+// 2026-11-22
+// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class PluginDescriptorVerificationTest {
 	private static final String PLUGIN_ID = "df.idea";
 	private static final String PLUGIN_NAME = "Dmitrii Fediuk";
 	private static final String VENDOR_URL = "https://github.com/dmitrii-fediuk";
+	// 2026-11-22
+	// "Standardize df.idea feature package names with snake_case word separators":
+	// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 	private static final String COPY_REFERENCE_IMPL = "df.idea.feature.copy_reference.ExclusionAwareVirtualFileQualifiedNameProvider";
+	// 2026-11-22
+	// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+	// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+	// 2026-11-22
+	// "Standardize df.idea feature package names with snake_case word separators":
+	// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 	private static final String MARKDOWN_CODE_FENCE_BACKGROUND_IMPL = "df.idea.feature.markdown_code_fence_background.MarkdownCodeFenceBackgroundEditorListener";
+	// 2026-11-22
+	// "Remove nested ProjectRootEntity instances covered by module content roots":
+	// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+	// 2026-11-22
+	// "Standardize df.idea feature package names with snake_case word separators":
+	// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 	private static final String NESTED_PROJECT_ROOT_IMPL = "df.idea.feature.nested_project_root.NestedProjectRootCleanupActivity";
+	// 2026-11-22
+	// "Standardize df.idea feature package names with snake_case word separators":
+	// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 	private static final String PLUGIN_UPDATE_SETTINGS_PROVIDER_IMPL = "df.idea.feature.plugin_update_source.LocalPluginUpdateSettingsProvider";
 	private static final String PLUGIN_UPDATE_SOURCE_REGISTRAR_IMPL = "df.idea.feature.plugin_update_source.LocalUpdateSourceRegistrar";
 	private static final String PROJECT_PATH_MACRO_IMPL = "df.idea.feature.project_path_macro.ProjectPropertiesPathMacroContributor";
@@ -112,16 +134,34 @@ public final class PluginDescriptorVerificationTest {
 		List<ExtensionDescriptor> vfqnp = extensions.get("com.intellij.virtualFileQualifiedNameProvider");
 		A.assertTrue("registers com.intellij.virtualFileQualifiedNameProvider", null != vfqnp && 1 == vfqnp.size());
 		ExtensionDescriptor copyRefExt = vfqnp.get(0);
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		A.assertEquals("copy_reference implementation class", COPY_REFERENCE_IMPL, copyRefExt.implementation);
 		A.assertEquals("copy_reference extension order is FIRST", LoadingOrder.FIRST.toString(), copyRefExt.order.toString());
 		List<ExtensionDescriptor> ppmc = extensions.get("com.intellij.projectPathMacroContributor");
 		A.assertTrue("registers com.intellij.projectPathMacroContributor", null != ppmc && 1 == ppmc.size());
 		ExtensionDescriptor macroExt = ppmc.get(0);
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		A.assertEquals("project_path_macro implementation class", PROJECT_PATH_MACRO_IMPL, macroExt.implementation);
+		// 2026-11-22
+		// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		List<ExtensionDescriptor> efl = extensions.get("com.intellij.editorFactoryListener");
 		A.assertTrue("registers com.intellij.editorFactoryListener", null != efl && 1 == efl.size());
 		ExtensionDescriptor mdFenceExt = efl.get(0);
 		A.assertEquals("markdown_code_fence_background implementation class", MARKDOWN_CODE_FENCE_BACKGROUND_IMPL, mdFenceExt.implementation);
+		// 2026-11-22
+		// "Remove nested ProjectRootEntity instances covered by module content roots":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		List<ExtensionDescriptor> psa = extensions.get("com.intellij.postStartupActivity");
 		A.assertTrue("registers com.intellij.postStartupActivity", null != psa && 1 == psa.size());
 		ExtensionDescriptor projectRootsExt = psa.get(0);
@@ -129,10 +169,16 @@ public final class PluginDescriptorVerificationTest {
 		List<ExtensionDescriptor> usp = extensions.get("com.intellij.updateSettingsProvider");
 		A.assertTrue("registers com.intellij.updateSettingsProvider", null != usp && 1 == usp.size());
 		ExtensionDescriptor updateProviderExt = usp.get(0);
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		A.assertEquals("plugin_update_source provider implementation class", PLUGIN_UPDATE_SETTINGS_PROVIDER_IMPL, updateProviderExt.implementation);
 		List<ListenerDescriptor> appListeners = descriptor.getAppContainerDescriptor().listeners;
 		boolean foundInvalidator = false;
 		boolean foundUpdateRegistrar = false;
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		for (ListenerDescriptor ld : appListeners) {
 			if (PROJECT_PATH_MACRO_CACHE_INVALIDATOR_IMPL.equals(ld.listenerClassName)
 				&& ProjectCloseListener.class.getName().equals(ld.topicClassName)) {
@@ -148,14 +194,23 @@ public final class PluginDescriptorVerificationTest {
 		try (URLClassLoader loader = new URLClassLoader(new URL[]{jarPath.toUri().toURL()}, PluginDescriptorVerificationTest.class.getClassLoader())) {
 			Object copyRefInstance = Class.forName(copyRefExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements VirtualFileQualifiedNameProvider", copyRefInstance instanceof VirtualFileQualifiedNameProvider);
+			// 2026-11-22
+			// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+			// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 			Object mdFenceInstance = Class.forName(mdFenceExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements EditorFactoryListener", mdFenceInstance instanceof EditorFactoryListener);
 			Object macroInstance = Class.forName(macroExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements ProjectWidePathMacroContributor", macroInstance instanceof ProjectWidePathMacroContributor);
+			// 2026-11-22
+			// "Remove nested ProjectRootEntity instances covered by module content roots":
+			// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 			Object projectRootsInstance = Class.forName(projectRootsExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements ProjectActivity", projectRootsInstance instanceof ProjectActivity);
 			Object updateProviderInstance = Class.forName(updateProviderExt.implementation, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements UpdateSettingsProvider", updateProviderInstance instanceof UpdateSettingsProvider);
+			// 2026-11-22
+			// "Standardize df.idea feature package names with snake_case word separators":
+			// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 			Object listenerInstance = Class.forName(PROJECT_PATH_MACRO_CACHE_INVALIDATOR_IMPL, true, loader).getDeclaredConstructor().newInstance();
 			A.assertTrue("loaded class implements ProjectCloseListener", listenerInstance instanceof ProjectCloseListener);
 			Object registrarInstance = Class.forName(PLUGIN_UPDATE_SOURCE_REGISTRAR_IMPL, true, loader).getDeclaredConstructor().newInstance();

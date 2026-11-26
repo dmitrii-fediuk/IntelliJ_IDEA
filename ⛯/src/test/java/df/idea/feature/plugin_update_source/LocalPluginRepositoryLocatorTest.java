@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.plugin_update_source;
@@ -12,9 +11,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.stream.Stream;
+// 2026-11-22
+// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class LocalPluginRepositoryLocatorTest {
 	private static final Assertions A = new Assertions();
 	public static void main(String[] args) throws Exception {
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		Path tempRoot = Files.createTempDirectory("df-plugin-update-source-locator-");
 		try {
 			testSiblingFileInNonBmpPath(tempRoot);

@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.markdown_code_fence_background;
@@ -15,6 +14,9 @@ import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.util.Disposer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 final class MarkdownCodeFenceBackgroundSuppressor {
 	static final String TARGET_KEY_NAME = "MARKDOWN_CODE_FENCE_BACKGROUND";
 	private static final Logger LOG = Logger.getInstance(MarkdownCodeFenceBackgroundSuppressor.class);
@@ -23,6 +25,9 @@ final class MarkdownCodeFenceBackgroundSuppressor {
 		Disposable r = null;
 		if (markupModel instanceof MarkupModelEx markupModelEx) {
 			suppressExisting(markupModelEx);
+			// 2026-11-22
+			// "Standardize df.idea feature package names with snake_case word separators":
+			// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 			Disposable disposable = Disposer.newDisposable("df.idea.feature.markdown_code_fence_background");
 			try {
 				markupModelEx.addMarkupModelListener(disposable, createListener());

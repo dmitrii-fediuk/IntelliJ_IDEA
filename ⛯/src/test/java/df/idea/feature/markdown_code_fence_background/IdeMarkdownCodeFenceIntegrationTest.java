@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.markdown_code_fence_background;
@@ -24,6 +23,9 @@ import java.lang.reflect.Proxy;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
+// 2026-11-22
+// "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 public final class IdeMarkdownCodeFenceIntegrationTest {
 	private static final Assertions A = new Assertions();
 	private static final TextAttributesKey CODE_FENCE_BG_KEY = TextAttributesKey.createTextAttributesKey(
@@ -74,6 +76,9 @@ public final class IdeMarkdownCodeFenceIntegrationTest {
 		);
 	}
 	private static void verifyNoMarkdownPluginCouplingInProductionBytecode() throws Exception {
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		List<String> classResources = List.of(
 			"df/idea/feature/markdown_code_fence_background/MarkdownCodeFenceBackgroundSuppressor.class",
 			"df/idea/feature/markdown_code_fence_background/MarkdownCodeFenceBackgroundSuppressor$1.class",

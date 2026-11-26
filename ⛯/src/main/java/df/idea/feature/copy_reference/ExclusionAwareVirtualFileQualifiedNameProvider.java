@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.copy_reference;
@@ -14,6 +13,9 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class ExclusionAwareVirtualFileQualifiedNameProvider implements VirtualFileQualifiedNameProvider {
 	@FunctionalInterface
 	interface ExcludeRootsResolver {

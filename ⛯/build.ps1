@@ -1,12 +1,7 @@
 ﻿# 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
+# 2026-11-22
 # "Initialize standalone df.idea IntelliJ IDEA plugin repository":
 # https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
-# "Remove nested ProjectRootEntity instances covered by module content roots":
-# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
-# "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
-# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
-# "Standardize df.idea feature package names with snake_case word separators":
-# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 param(
 	[string]$IdeaHome = '',
 	[string]$IdeaPropertiesFile = '',
@@ -300,10 +295,19 @@ try {
 			throw "Test compilation failed with exit code $LASTEXITCODE"
 		}
 		$runCp = "$testOut;$mainOut;$ideaLibWildcard"
+		# 2026-11-22
+		# "Standardize df.idea feature package names with snake_case word separators":
+		# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		$featureTests = @(
 			'df.idea.feature.copy_reference.ExclusionAwareVirtualFileQualifiedNameProviderTest',
+			# 2026-11-22
+			# "Suppress Markdown code fence background renderer in IntelliJ IDEA 2026.3+":
+			# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/3
 			'df.idea.feature.markdown_code_fence_background.MarkdownCodeFenceBackgroundSuppressorTest',
 			'df.idea.feature.markdown_code_fence_background.IdeMarkdownCodeFenceIntegrationTest',
+			# 2026-11-22
+			# "Remove nested ProjectRootEntity instances covered by module content roots":
+			# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 			'df.idea.feature.nested_project_root.NestedProjectRootMatcherTest',
 			'df.idea.feature.nested_project_root.NestedProjectRootCleanerTest',
 			'df.idea.feature.nested_project_root.IdeProjectRootIntegrationTest',
@@ -320,6 +324,9 @@ try {
 				throw "Test suite $testClass failed with exit code $LASTEXITCODE"
 			}
 		}
+		# 2026-11-22
+		# "Standardize df.idea feature package names with snake_case word separators":
+		# https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		& $java '-Dfile.encoding=UTF-8' '-Dstdout.encoding=UTF-8' -cp $runCp 'df.idea.feature.plugin_update_source.IdeUpdateSourceIntegrationTest' $stagedJar
 		if (0 -ne $LASTEXITCODE) {
 			throw "Test suite IdeUpdateSourceIntegrationTest failed with exit code $LASTEXITCODE"

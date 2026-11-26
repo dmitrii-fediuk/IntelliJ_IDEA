@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Remove nested ProjectRootEntity instances covered by module content roots":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.nested_project_root;
@@ -50,6 +49,9 @@ import kotlinx.coroutines.flow.FlowKt;
 import kotlinx.coroutines.flow.MutableSharedFlow;
 import kotlinx.coroutines.flow.SharedFlowKt;
 import org.jetbrains.annotations.Nullable;
+// 2026-11-22
+// "Remove nested ProjectRootEntity instances covered by module content roots":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/2
 public final class IdeProjectRootIntegrationTest {
 	private static final Assertions A = new Assertions();
 	private static final EntitySource TEST_SOURCE = new EntitySource() {
@@ -239,6 +241,9 @@ public final class IdeProjectRootIntegrationTest {
 	}
 	private static void verifyNoHardInternalReferenceInProductionBytecode() throws Exception {
 		ClassLoader cl = NestedProjectRootCleanupActivity.class.getClassLoader();
+		// 2026-11-22
+		// "Standardize df.idea feature package names with snake_case word separators":
+		// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 		String[] classes = {
 			"df/idea/feature/nested_project_root/NestedProjectRootMatcher.class",
 			"df/idea/feature/nested_project_root/ProjectRootEntityAdapter.class",

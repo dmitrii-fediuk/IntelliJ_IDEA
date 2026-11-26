@@ -1,6 +1,5 @@
 // 2026-11-22 Dmitrii Fediuk https://github.com/dmitrii-fediuk
-// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
-// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
+// 2026-11-22
 // "Standardize df.idea feature package names with snake_case word separators":
 // https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/4
 package df.idea.feature.project_path_macro;
@@ -16,6 +15,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
+// 2026-11-22
+// "Initialize standalone df.idea IntelliJ IDEA plugin repository":
+// https://github.com/dmitrii-fediuk/IntelliJ_IDEA/issues/1
 public final class MacroPropertiesParser {
 	public static final Pattern VALID_MACRO_NAME = Pattern.compile("^[A-Za-z0-9_.-]+$");
 	private static final Set<String> RESERVED_SYSTEM_MACROS = Set.of(
